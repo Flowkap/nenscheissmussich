@@ -1,0 +1,17 @@
+{
+  "name": "'Nen Scheiss muss ich!",
+  "short_name": "Nen Scheiss",
+  "description": "Floating unicorns on donuts. Nothing else.",
+  "lang": "de",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#e8e9f5",
+  "theme_color": "#e8e9f5",
+  "icons": [
+    { "src": "graphics/icon/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "graphics/icon/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "graphics/icon/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "graphics/icon/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

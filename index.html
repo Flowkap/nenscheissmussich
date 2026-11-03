@@ -6,7 +6,12 @@
   <title>nenscheissmussi.ch</title>
   <meta name="description" content="'Nen Scheiss muss ich!">
   <meta name="robots" content="noindex">
-  <link rel="icon" type="image/png" href="avatar.png">
+  <link rel="icon" type="image/svg+xml" href="graphics/icon/icon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="graphics/icon/favicon-32.png">
+  <link rel="apple-touch-icon" href="graphics/icon/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#e8e9f5">
+  <meta name="apple-mobile-web-app-title" content="Nen Scheiss">
   <style>
     :root {
       --paper: #e8e9f5;
@@ -314,6 +319,10 @@
         pending = setTimeout(layout, 150);
       });
       window.addEventListener("load", layout);
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => navigator.serviceWorker.register("sw.js"));
+      }
     })();
   </script>
 </body>
