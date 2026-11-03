@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-250 -215 545 410" role="img" aria-labelledby="t">
+  <title id="t">Unicorn on a donut float</title>
+  <defs>
+    <clipPath id="icing-clip">
+      <path d="M-215 60 A215 127 0 0 1 215 60 L209.0 72.3 L203.0 78.2 L197.0 83.0 L191.0 87.4 L185.0 91.8 L179.0 96.2 L173.0 100.5 L167.0 104.7 L161.0 108.6 L155.0 112.0 L149.0 114.9 L143.0 117.1 L137.0 118.7 L131.0 119.6 L125.0 119.9 L119.0 119.8 L113.0 119.4 L107.0 118.9 L101.0 118.5 L95.0 118.4 L89.0 118.7 L83.0 119.5 L77.0 120.7 L71.0 122.3 L65.0 124.3 L59.0 126.5 L53.0 128.7 L47.0 130.7 L41.0 132.4 L35.0 133.6 L29.0 134.2 L23.0 134.2 L17.0 133.7 L11.0 132.6 L5.0 131.2 L-1.0 129.6 L-7.0 127.9 L-13.0 126.4 L-19.0 125.2 L-25.0 124.5 L-31.0 124.2 L-37.0 124.4 L-43.0 125.0 L-49.0 126.0 L-55.0 127.1 L-61.0 128.2 L-67.0 129.1 L-73.0 129.7 L-79.0 129.7 L-85.0 129.2 L-91.0 128.0 L-97.0 126.2 L-103.0 124.0 L-109.0 121.3 L-115.0 118.5 L-121.0 115.6 L-127.0 112.9 L-133.0 110.4 L-139.0 108.3 L-145.0 106.7 L-151.0 105.4 L-157.0 104.5 L-163.0 103.7 L-169.0 103.0 L-175.0 102.0 L-181.0 100.6 L-187.0 98.6 L-193.0 95.6 L-199.0 91.4 L-205.0 85.7 L-211.0 77.1 L-215.0 62.9 Z"/>
+    </clipPath>
+    <g id="donut">
+      <ellipse cx="0" cy="60" rx="215" ry="127" fill="#b8692c"/>
+      <path d="M-215 60 A215 127 0 0 1 215 60 L209.0 72.3 L203.0 78.2 L197.0 83.0 L191.0 87.4 L185.0 91.8 L179.0 96.2 L173.0 100.5 L167.0 104.7 L161.0 108.6 L155.0 112.0 L149.0 114.9 L143.0 117.1 L137.0 118.7 L131.0 119.6 L125.0 119.9 L119.0 119.8 L113.0 119.4 L107.0 118.9 L101.0 118.5 L95.0 118.4 L89.0 118.7 L83.0 119.5 L77.0 120.7 L71.0 122.3 L65.0 124.3 L59.0 126.5 L53.0 128.7 L47.0 130.7 L41.0 132.4 L35.0 133.6 L29.0 134.2 L23.0 134.2 L17.0 133.7 L11.0 132.6 L5.0 131.2 L-1.0 129.6 L-7.0 127.9 L-13.0 126.4 L-19.0 125.2 L-25.0 124.5 L-31.0 124.2 L-37.0 124.4 L-43.0 125.0 L-49.0 126.0 L-55.0 127.1 L-61.0 128.2 L-67.0 129.1 L-73.0 129.7 L-79.0 129.7 L-85.0 129.2 L-91.0 128.0 L-97.0 126.2 L-103.0 124.0 L-109.0 121.3 L-115.0 118.5 L-121.0 115.6 L-127.0 112.9 L-133.0 110.4 L-139.0 108.3 L-145.0 106.7 L-151.0 105.4 L-157.0 104.5 L-163.0 103.7 L-169.0 103.0 L-175.0 102.0 L-181.0 100.6 L-187.0 98.6 L-193.0 95.6 L-199.0 91.4 L-205.0 85.7 L-211.0 77.1 L-215.0 62.9 Z" fill="#f3d9ab"/>
+      <g clip-path="url(#icing-clip)">
+        <path d="M-212.0 30.0 C-212.0 28.3 -206.8 21.4 -201.5 21.4 C-196.2 21.4 -191.0 29.1 -191.0 30.0 C-191.0 28.1 -185.8 20.5 -180.5 20.5 C-175.2 20.5 -170.0 29.1 -170.0 30.0 C-169.2 27.7 -160.9 20.1 -155.9 21.8 C-150.9 23.6 -149.6 35.8 -150.0 37.0 C-149.4 35.4 -142.1 30.5 -137.1 32.3 C-132.1 34.0 -129.7 43.2 -130.0 44.0 C-128.9 42.5 -120.9 39.4 -117.1 42.2 C-113.4 44.9 -114.5 54.3 -115.0 55.0 C-113.9 53.4 -105.5 49.9 -101.8 52.7 C-98.0 55.4 -99.4 65.2 -100.0 66.0 C-98.8 65.8 -92.3 69.2 -90.6 73.2 C-88.8 77.2 -92.4 81.9 -93.0 82.0 C-91.3 81.8 -82.9 84.9 -81.2 88.9 C-79.4 92.9 -85.2 97.9 -86.0 98.0 C-84.0 97.9 -75.3 102.8 -74.6 108.1 C-73.8 113.3 -82.0 119.0 -83.0 119.0 C-80.8 118.9 -71.0 123.8 -70.3 129.0 C-69.5 134.3 -78.9 140.0 -80.0 140.0 L-80 230 H-260 V30 Z" fill="#b8692c"/>
+        <path d="M-190 62 q6 4 10 0 M-158 80 q6 4 10 0 M-176 108 q6 4 10 0 M-130 100 q6 4 10 0 M-112 128 q6 4 10 0"
+              fill="none" stroke="#8e4c1c" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+        <path d="M-212.0 30.0 C-212.0 28.3 -206.8 21.4 -201.5 21.4 C-196.2 21.4 -191.0 29.1 -191.0 30.0 C-191.0 28.1 -185.8 20.5 -180.5 20.5 C-175.2 20.5 -170.0 29.1 -170.0 30.0 C-169.2 27.7 -160.9 20.1 -155.9 21.8 C-150.9 23.6 -149.6 35.8 -150.0 37.0 C-149.4 35.4 -142.1 30.5 -137.1 32.3 C-132.1 34.0 -129.7 43.2 -130.0 44.0 C-128.9 42.5 -120.9 39.4 -117.1 42.2 C-113.4 44.9 -114.5 54.3 -115.0 55.0 C-113.9 53.4 -105.5 49.9 -101.8 52.7 C-98.0 55.4 -99.4 65.2 -100.0 66.0 C-98.8 65.8 -92.3 69.2 -90.6 73.2 C-88.8 77.2 -92.4 81.9 -93.0 82.0 C-91.3 81.8 -82.9 84.9 -81.2 88.9 C-79.4 92.9 -85.2 97.9 -86.0 98.0 C-84.0 97.9 -75.3 102.8 -74.6 108.1 C-73.8 113.3 -82.0 119.0 -83.0 119.0 C-80.8 118.9 -71.0 123.8 -70.3 129.0 C-69.5 134.3 -78.9 140.0 -80.0 140.0" fill="none" stroke="#2b1d26" stroke-width="5" stroke-linejoin="round"/>
+      </g>
+      <path d="M-215 60 A215 127 0 0 1 215 60 L209.0 72.3 L203.0 78.2 L197.0 83.0 L191.0 87.4 L185.0 91.8 L179.0 96.2 L173.0 100.5 L167.0 104.7 L161.0 108.6 L155.0 112.0 L149.0 114.9 L143.0 117.1 L137.0 118.7 L131.0 119.6 L125.0 119.9 L119.0 119.8 L113.0 119.4 L107.0 118.9 L101.0 118.5 L95.0 118.4 L89.0 118.7 L83.0 119.5 L77.0 120.7 L71.0 122.3 L65.0 124.3 L59.0 126.5 L53.0 128.7 L47.0 130.7 L41.0 132.4 L35.0 133.6 L29.0 134.2 L23.0 134.2 L17.0 133.7 L11.0 132.6 L5.0 131.2 L-1.0 129.6 L-7.0 127.9 L-13.0 126.4 L-19.0 125.2 L-25.0 124.5 L-31.0 124.2 L-37.0 124.4 L-43.0 125.0 L-49.0 126.0 L-55.0 127.1 L-61.0 128.2 L-67.0 129.1 L-73.0 129.7 L-79.0 129.7 L-85.0 129.2 L-91.0 128.0 L-97.0 126.2 L-103.0 124.0 L-109.0 121.3 L-115.0 118.5 L-121.0 115.6 L-127.0 112.9 L-133.0 110.4 L-139.0 108.3 L-145.0 106.7 L-151.0 105.4 L-157.0 104.5 L-163.0 103.7 L-169.0 103.0 L-175.0 102.0 L-181.0 100.6 L-187.0 98.6 L-193.0 95.6 L-199.0 91.4 L-205.0 85.7 L-211.0 77.1 L-215.0 62.9 Z" fill="none" stroke="#2b1d26" stroke-width="5" stroke-linejoin="round"/>
+      <ellipse cx="0" cy="60" rx="215" ry="127" fill="none" stroke="#2b1d26" stroke-width="5"/>
+      <rect x="-159.5" y="-16.9" width="18" height="9" rx="4.5" fill="#2b8fb8" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-22 -150.5 -12.4)"/>
+      <rect x="134.4" y="-2.2" width="18" height="9" rx="4.5" fill="#3b6fd9" stroke="#2b1d26" stroke-width="2.2" transform="rotate(45 143.4 2.3)"/>
+      <rect x="108.8" y="88.7" width="18" height="9" rx="4.5" fill="#2b8fb8" stroke="#2b1d26" stroke-width="2.2" transform="rotate(38 117.8 93.2)"/>
+      <rect x="-41.8" y="101.6" width="18" height="9" rx="4.5" fill="#d8363c" stroke="#2b1d26" stroke-width="2.2" transform="rotate(28 -32.8 106.1)"/>
+      <rect x="96.8" y="60.7" width="18" height="9" rx="4.5" fill="#3b6fd9" stroke="#2b1d26" stroke-width="2.2" transform="rotate(40 105.8 65.2)"/>
+      <rect x="69.1" y="65.5" width="18" height="9" rx="4.5" fill="#3b6fd9" stroke="#2b1d26" stroke-width="2.2" transform="rotate(4 78.1 70.0)"/>
+      <rect x="-19.4" y="80.9" width="18" height="9" rx="4.5" fill="#3b6fd9" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-57 -10.4 85.4)"/>
+      <rect x="-61.3" y="59.2" width="18" height="9" rx="4.5" fill="#7a3fc0" stroke="#2b1d26" stroke-width="2.2" transform="rotate(4 -52.3 63.7)"/>
+      <rect x="61.5" y="-54.5" width="18" height="9" rx="4.5" fill="#f08a24" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-49 70.5 -50.0)"/>
+      <rect x="-125.5" y="-30.5" width="18" height="9" rx="4.5" fill="#2b8fb8" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-58 -116.5 -26.0)"/>
+      <rect x="-73.0" y="-54.8" width="18" height="9" rx="4.5" fill="#7a3fc0" stroke="#2b1d26" stroke-width="2.2" transform="rotate(14 -64.0 -50.3)"/>
+      <rect x="122.5" y="-30.7" width="18" height="9" rx="4.5" fill="#d8363c" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-14 131.5 -26.2)"/>
+      <rect x="8.3" y="-60.5" width="18" height="9" rx="4.5" fill="#d8363c" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-0 17.3 -56.0)"/>
+      <rect x="136.3" y="88.1" width="18" height="9" rx="4.5" fill="#7a3fc0" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-5 145.3 92.6)"/>
+      <rect x="4.0" y="106.5" width="18" height="9" rx="4.5" fill="#7a3fc0" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-51 13.0 111.0)"/>
+      <rect x="173.6" y="32.8" width="18" height="9" rx="4.5" fill="#2fa64e" stroke="#2b1d26" stroke-width="2.2" transform="rotate(57 182.6 37.3)"/>
+      <rect x="127.2" y="39.9" width="18" height="9" rx="4.5" fill="#7a3fc0" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-37 136.2 44.4)"/>
+      <rect x="-105.3" y="26.5" width="18" height="9" rx="4.5" fill="#d8363c" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-41 -96.3 31.0)"/>
+      <rect x="-8.3" y="51.6" width="18" height="9" rx="4.5" fill="#3b6fd9" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-22 0.7 56.1)"/>
+      <rect x="36.0" y="45.7" width="18" height="9" rx="4.5" fill="#7a3fc0" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-42 45.0 50.2)"/>
+      <rect x="44.8" y="111.5" width="18" height="9" rx="4.5" fill="#3b6fd9" stroke="#2b1d26" stroke-width="2.2" transform="rotate(0 53.8 116.0)"/>
+      <rect x="14.4" y="72.9" width="18" height="9" rx="4.5" fill="#2fa64e" stroke="#2b1d26" stroke-width="2.2" transform="rotate(46 23.4 77.4)"/>
+      <rect x="41.5" y="84.6" width="18" height="9" rx="4.5" fill="#2fa64e" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-45 50.5 89.1)"/>
+      <rect x="83.9" y="33.6" width="18" height="9" rx="4.5" fill="#2b8fb8" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-26 92.9 38.1)"/>
+      <rect x="163.6" y="6.6" width="18" height="9" rx="4.5" fill="#2b8fb8" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-18 172.6 11.1)"/>
+      <rect x="174.1" y="70.5" width="18" height="9" rx="4.5" fill="#3b6fd9" stroke="#2b1d26" stroke-width="2.2" transform="rotate(23 183.1 75.0)"/>
+      <rect x="-103.0" y="-47.8" width="18" height="9" rx="4.5" fill="#f08a24" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-58 -94.0 -43.3)"/>
+      <rect x="69.8" y="97.1" width="18" height="9" rx="4.5" fill="#d8363c" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-47 78.8 101.6)"/>
+      <rect x="-132.4" y="0.4" width="18" height="9" rx="4.5" fill="#f08a24" stroke="#2b1d26" stroke-width="2.2" transform="rotate(58 -123.4 4.9)"/>
+      <rect x="96.1" y="-44.0" width="18" height="9" rx="4.5" fill="#d8363c" stroke="#2b1d26" stroke-width="2.2" transform="rotate(35 105.1 -39.5)"/>
+      <rect x="-35.8" y="45.6" width="18" height="9" rx="4.5" fill="#2fa64e" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-59 -26.8 50.1)"/>
+      <rect x="-79.2" y="37.5" width="18" height="9" rx="4.5" fill="#7a3fc0" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-59 -70.2 42.0)"/>
+      <rect x="108.5" y="10.6" width="18" height="9" rx="4.5" fill="#7a3fc0" stroke="#2b1d26" stroke-width="2.2" transform="rotate(39 117.5 15.1)"/>
+      <rect x="-42.5" y="-59.0" width="18" height="9" rx="4.5" fill="#2b8fb8" stroke="#2b1d26" stroke-width="2.2" transform="rotate(-51 -33.5 -54.5)"/>
+      <rect x="149.7" y="58.3" width="18" height="9" rx="4.5" fill="#2b8fb8" stroke="#2b1d26" stroke-width="2.2" transform="rotate(36 158.7 62.8)"/>
+      <ellipse cx="0" cy="-2" rx="108" ry="46" fill="#8b3aa8" stroke="#2b1d26" stroke-width="5"/>
+    </g>
+    <clipPath id="front-rim">
+      <path d="M-260 220 H260 V44 H108 V-2 A108 46 0 0 1 -108 -2 V44 H-260 Z"/>
+    </clipPath>
+    <linearGradient id="horn-silver" gradientUnits="userSpaceOnUse" x1="919" y1="160" x2="891" y2="240">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.3" stop-color="#e3e6ea"/>
+      <stop offset="0.65" stop-color="#a7adb5"/>
+      <stop offset="1" stop-color="#6c727b"/>
+    </linearGradient>
+    <!-- drawn in the coordinates of the reference photo crop, mapped onto the donut -->
+    <g id="narwhal" transform="translate(0 60) scale(0.47) translate(-527 -560)"
+       stroke="#2b1d26" stroke-width="10.5" stroke-linejoin="round" stroke-linecap="round">
+      <g id="leg-back">
+      <clipPath id="leg-back-shape"><path d="M290 336 L100 120 C92 106 110 90 124 100 L332 300 Z"/></clipPath>
+      <path d="M290 336 L100 120 C92 106 110 90 124 100 L332 300 Z" fill="#ee7fd2" stroke="none"/>
+      <circle cx="104" cy="104" r="24" fill="#8b3aa8" stroke="none" clip-path="url(#leg-back-shape)"/>
+      <path d="M290 336 L100 120 C92 106 110 90 124 100 L332 300 Z" fill="none"/>
+      </g>
+      <g id="body">
+      <path d="M450 545 C520 420 640 330 760 270 C792 232 792 164 772 116
+               C752 84 742 42 772 20 C804 -2 880 0 910 40 C950 90 952 160 936 210
+               C930 258 962 298 942 330 C890 365 700 440 580 545 Z" fill="#ee7fd2"/>
+      <path d="M936 326 C880 368 700 446 590 550 L548 550 C660 444 836 362 912 318 Z" fill="#8b3aa8"/>
+      <circle cx="846" cy="22" r="9" fill="#2b1d26" stroke="none"/>
+      <!-- closed eyes with lashes -->
+      <path d="M850 132 C862 146 884 148 902 136" fill="none" stroke-width="8"/>
+      <path d="M860 140 L852 124 M874 145 L870 128 M888 143 L890 126" fill="none" stroke-width="6"/>
+      <path d="M836 166 C852 190 876 198 898 188" fill="none" stroke-width="8"/>
+      </g>
+      <g id="arm">
+      <path d="M680 336 C770 316 850 284 902 236" fill="none" stroke-width="54" stroke-linecap="butt"/>
+      <path d="M672 338 C770 316 850 284 902 236" fill="none" stroke="#ee7fd2" stroke-width="33" stroke-linecap="butt"/>
+      </g>
+      <g id="ears">
+        <path d="M930 228 C960 270 1000 304 1048 318 C1036 278 1004 246 962 222 Z" fill="#ee7fd2"/>
+        <path d="M956 240 C978 270 1004 292 1030 304" fill="none" stroke="#d55db8" stroke-width="10"/>
+        <path d="M868 228 C878 290 916 344 976 368 C976 316 950 266 914 236 Z" fill="#ee7fd2"/>
+        <path d="M888 248 C898 294 922 328 956 348" fill="none" stroke-width="7"/>
+      </g>
+      <g id="hand">
+        <path d="M872 232 C870 206 912 202 924 222 C934 244 912 262 890 256 C878 252 872 244 872 232 Z" fill="#ee7fd2"/>
+        <path d="M898 222 C906 228 908 238 902 246 M912 218 C920 226 922 236 916 244" fill="none" stroke-width="6"/>
+      </g>
+      <g id="horn">
+        <clipPath id="horn-shape"><path d="M920 159 L1124 272 Q1132 282 1119 285 L890 241 Q892 195 920 159 Z"/></clipPath>
+        <path d="M920 159 L1124 272 Q1132 282 1119 285 L890 241 Q892 195 920 159 Z" fill="url(#horn-silver)" stroke="none"/>
+        <g clip-path="url(#horn-shape)">
+          <path d="M894 260 L976 162" stroke="#3c3f45" stroke-width="15" opacity="0.75"/>
+          <path d="M933 274 L1015 176" stroke="#3c3f45" stroke-width="13" opacity="0.75"/>
+          <path d="M972 288 L1054 190" stroke="#3c3f45" stroke-width="12" opacity="0.75"/>
+          <path d="M1011 302 L1093 204" stroke="#3c3f45" stroke-width="11" opacity="0.75"/>
+          <path d="M1050 316 L1132 218" stroke="#3c3f45" stroke-width="9" opacity="0.75"/>
+          <path d="M916 172 C980 196 1050 226 1112 262" fill="none" stroke="#ffffff" stroke-width="9" opacity="0.85"/>
+          <path d="M940 178 C990 196 1030 214 1060 228" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.6"/>
+        </g>
+        <path d="M920 159 L1124 272 Q1132 282 1119 285 L890 241 Q892 195 920 159 Z" fill="none"/>
+      </g>
+      <g id="leg-front">
+      <clipPath id="leg-front-shape"><path d="M40 190 C35 168 60 158 76 172 C200 270 380 330 480 400
+               C562 452 562 542 500 544 C440 546 400 520 360 482 C260 392 140 282 40 190 Z"/></clipPath>
+      <path d="M40 190 C35 168 60 158 76 172 C200 270 380 330 480 400
+               C562 452 562 542 500 544 C440 546 400 520 360 482 C260 392 140 282 40 190 Z" fill="#ee7fd2" stroke="none"/>
+      <circle cx="50" cy="178" r="24" fill="#8b3aa8" stroke="none" clip-path="url(#leg-front-shape)"/>
+      <path d="M40 190 C35 168 60 158 76 172 C200 270 380 330 480 400
+               C562 452 562 542 500 544 C440 546 400 520 360 482 C260 392 140 282 40 190 Z" fill="none"/>
+      <path d="M470 470 C490 490 504 512 506 530" fill="none" stroke="#d55db8" stroke-width="12"/>
+      </g>
+    </g>
+    <g id="float">
+      <use href="#donut" xlink:href="#donut"/>
+      <use href="#narwhal" xlink:href="#narwhal"/>
+      <use href="#donut" xlink:href="#donut" clip-path="url(#front-rim)"/>
+    </g>
+  </defs>
+  <use href="#float" xlink:href="#float"/>
+</svg>
