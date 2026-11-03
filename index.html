@@ -27,7 +27,7 @@
     .wave {
       fill: none;
       stroke: var(--wave);
-      stroke-width: 9;
+      stroke-width: var(--stroke, 6px);
       stroke-linecap: round;
       opacity: 0.9;
       transform-box: fill-box;
@@ -46,8 +46,8 @@
       animation: drift var(--drift) ease-in-out var(--delay) infinite alternate;
     }
     @keyframes drift {
-      from { transform: translateX(-2.5vw); }
-      to   { transform: translateX(2.5vw); }
+      from { transform: translateX(calc(var(--amp) * -1)); }
+      to   { transform: translateX(var(--amp)); }
     }
     .bob {
       transform-origin: 50% 75%;
@@ -84,83 +84,237 @@
       position: fixed;
       left: 50%;
       bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       transform: translateX(-50%);
-      padding: 4px 12px;
+      padding: 4px 6px 4px 14px;
       border-radius: 999px;
-      background: rgba(232, 233, 245, 0.85);
+      background: rgba(232, 233, 245, 0.88);
       color: #2b1d26;
-      font: 0.85rem system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font: 0.85rem/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      white-space: nowrap;
     }
     .backlink a { color: inherit; }
+    .info-button {
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      background: none;
+      color: inherit;
+      font: 700 0.8rem/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      cursor: pointer;
+    }
+    .details {
+      max-width: min(420px, calc(100vw - 32px));
+      padding: 0;
+      border: 0;
+      border-radius: 16px;
+      background: #e8e9f5;
+      color: #2b1d26;
+      box-shadow: 0 12px 40px rgba(43, 29, 38, 0.3);
+      font: 1rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    .details::backdrop { background: rgba(43, 29, 38, 0.45); }
+    .details-body { padding: 20px 24px; }
+    .details-body p { margin: 0 0 12px; }
+    .details-body a { color: inherit; }
+    .details-body button {
+      padding: 6px 16px;
+      border: 2px solid currentColor;
+      border-radius: 999px;
+      background: none;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+    @media (orientation: portrait) {
+      .lettering { top: 46%; width: 88vw; }
+    }
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; }
     }
   </style>
 </head>
 <body>
-  <svg class="waves" viewBox="0 0 2000 1400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <path class="wave" d="M30 139 C49 121, 68 121, 76 132 S99 139, 107 131 C126 121, 145 121, 153 132 S176 139, 183 131 C202 121, 222 121, 229 132 S252 139, 260 131" style="--d:6.0s;--delay:-3.3s;--dx:33px"/>
-      <path class="wave" d="M160 419 C178 401, 197 401, 204 412 S226 419, 233 411 C252 401, 270 401, 277 412 S299 419, 307 411 C325 401, 343 401, 351 412 S373 419, 380 411" style="--d:7.5s;--delay:-0.4s;--dx:-33px"/>
-      <path class="wave" d="M470 489 C489 471, 508 471, 516 482 S539 489, 547 481 C566 471, 585 471, 593 482 S616 489, 623 481 C642 471, 662 471, 669 482 S692 489, 700 481" style="--d:6.0s;--delay:-1.4s;--dx:33px"/>
-      <path class="wave" d="M600 264 C617 246, 633 246, 640 257 S660 264, 667 256 C683 246, 700 246, 707 257 S727 264, 733 256 C750 246, 767 246, 773 257 S793 264, 800 256" style="--d:6.6s;--delay:-5.2s;--dx:-22px"/>
-      <path class="wave" d="M790 89 C812 71, 835 71, 844 82 S871 89, 880 81 C902 71, 925 71, 934 82 S961 89, 970 81 C992 71, 1015 71, 1024 82 S1051 89, 1060 81" style="--d:8.5s;--delay:-3.1s;--dx:-20px"/>
-      <path class="wave" d="M890 479 C906 461, 922 461, 928 472 S947 479, 953 471 C969 461, 985 461, 991 472 S1010 479, 1017 471 C1032 461, 1048 461, 1055 472 S1074 479, 1080 471" style="--d:5.6s;--delay:-5.7s;--dx:-27px"/>
-      <path class="wave" d="M1430 484 C1449 466, 1468 466, 1476 477 S1499 484, 1507 476 C1526 466, 1545 466, 1553 477 S1576 484, 1583 476 C1602 466, 1622 466, 1629 477 S1652 484, 1660 476" style="--d:8.1s;--delay:-4.9s;--dx:33px"/>
-      <path class="wave" d="M1610 119 C1631 101, 1652 101, 1660 112 S1685 119, 1693 111 C1714 101, 1735 101, 1743 112 S1768 119, 1777 111 C1798 101, 1818 101, 1827 112 S1852 119, 1860 111" style="--d:7.4s;--delay:-5.5s;--dx:31px"/>
-      <path class="wave" d="M1790 529 C1806 511, 1822 511, 1828 522 S1847 529, 1853 521 C1869 511, 1885 511, 1891 522 S1910 529, 1917 521 C1932 511, 1948 511, 1955 522 S1974 529, 1980 521" style="--d:6.6s;--delay:-4.8s;--dx:22px"/>
-      <path class="wave" d="M1540 399 C1552 381, 1565 381, 1570 392 S1585 399, 1590 391 C1602 381, 1615 381, 1620 392 S1635 399, 1640 391 C1652 381, 1665 381, 1670 392 S1685 399, 1690 391" style="--d:8.5s;--delay:-0.6s;--dx:-33px"/>
-      <path class="wave" d="M450 944 C473 926, 497 926, 506 937 S534 944, 543 936 C567 926, 590 926, 599 937 S627 944, 637 936 C660 926, 683 926, 693 937 S721 944, 730 936" style="--d:5.9s;--delay:-5.8s;--dx:27px"/>
-      <path class="wave" d="M950 909 C969 891, 988 891, 996 902 S1019 909, 1027 901 C1046 891, 1065 891, 1073 902 S1096 909, 1103 901 C1122 891, 1142 891, 1149 902 S1172 909, 1180 901" style="--d:6.7s;--delay:-5.0s;--dx:31px"/>
-      <path class="wave" d="M1640 1009 C1657 991, 1673 991, 1680 1002 S1700 1009, 1707 1001 C1723 991, 1740 991, 1747 1002 S1767 1009, 1773 1001 C1790 991, 1807 991, 1813 1002 S1833 1009, 1840 1001" style="--d:7.3s;--delay:-5.4s;--dx:-26px"/>
-      <path class="wave" d="M710 1179 C729 1161, 748 1161, 756 1172 S779 1179, 787 1171 C806 1161, 825 1161, 833 1172 S856 1179, 863 1171 C882 1161, 902 1161, 909 1172 S932 1179, 940 1171" style="--d:9.0s;--delay:-4.0s;--dx:-28px"/>
-      <path class="wave" d="M1010 1284 C1031 1266, 1052 1266, 1060 1277 S1085 1284, 1093 1276 C1114 1266, 1135 1266, 1143 1277 S1168 1284, 1177 1276 C1198 1266, 1218 1266, 1227 1277 S1252 1284, 1260 1276" style="--d:8.9s;--delay:-5.4s;--dx:-24px"/>
-      <path class="wave" d="M1660 1234 C1685 1216, 1710 1216, 1720 1227 S1750 1234, 1760 1226 C1785 1216, 1810 1216, 1820 1227 S1850 1234, 1860 1226 C1885 1216, 1910 1216, 1920 1227 S1950 1234, 1960 1226" style="--d:7.5s;--delay:-5.9s;--dx:27px"/>
-      <path class="wave" d="M60 1339 C78 1321, 97 1321, 104 1332 S126 1339, 133 1331 C152 1321, 170 1321, 177 1332 S199 1339, 207 1331 C225 1321, 243 1321, 251 1332 S273 1339, 280 1331" style="--d:5.5s;--delay:-2.9s;--dx:20px"/>
-      <path class="wave" d="M1240 879 C1252 861, 1265 861, 1270 872 S1285 879, 1290 871 C1302 861, 1315 861, 1320 872 S1335 879, 1340 871 C1352 861, 1365 861, 1370 872 S1385 879, 1390 871" style="--d:6.4s;--delay:-0.4s;--dx:-18px"/>
-      <path class="wave" d="M250 649 C265 631, 280 631, 286 642 S304 649, 310 641 C325 631, 340 631, 346 642 S364 649, 370 641 C385 631, 400 631, 406 642 S424 649, 430 641" style="--d:6.2s;--delay:-4.6s;--dx:-19px"/>
-      <path class="wave" d="M1700 709 C1717 691, 1733 691, 1740 702 S1760 709, 1767 701 C1783 691, 1800 691, 1807 702 S1827 709, 1833 701 C1850 691, 1867 691, 1873 702 S1893 709, 1900 701" style="--d:7.4s;--delay:-4.6s;--dx:28px"/>
-      <path class="wave" d="M1150 1089 C1164 1071, 1178 1071, 1184 1082 S1201 1089, 1207 1081 C1221 1071, 1235 1071, 1241 1082 S1258 1089, 1263 1081 C1278 1071, 1292 1071, 1297 1082 S1314 1089, 1320 1081" style="--d:7.2s;--delay:-5.5s;--dx:34px"/>
-      <path class="wave" d="M330 1189 C347 1171, 363 1171, 370 1182 S390 1189, 397 1181 C413 1171, 430 1171, 437 1182 S457 1189, 463 1181 C480 1171, 497 1171, 503 1182 S523 1189, 530 1181" style="--d:5.9s;--delay:-0.2s;--dx:-20px"/>
-  </svg>
-  <div class="stage" aria-hidden="true">
-    <div class="drift" style="left:2%;top:4%;width:22vw;--drift:19s;--delay:-1.0s">
-      <div class="bob" style="--bob:6.5s;--delay:-1.0s">
-        <img src="graphics/unicorn/unicorn-float.svg" alt="" class="mirrored">
-      </div>
-    </div>
-    <div class="drift" style="left:42%;top:1%;width:26vw;--drift:23s;--delay:-3.4s">
-      <div class="bob" style="--bob:7.8s;--delay:-3.4s">
-        <img src="graphics/unicorn/unicorn-float.svg" alt="">
-      </div>
-    </div>
-    <div class="drift" style="left:79%;top:9%;width:16vw;--drift:17s;--delay:-2.2s">
-      <div class="bob" style="--bob:5.6s;--delay:-2.2s">
-        <img src="graphics/unicorn/unicorn-float.svg" alt="">
-      </div>
-    </div>
-    <div class="drift" style="left:4%;top:60%;width:20vw;--drift:21s;--delay:-4.1s">
-      <div class="bob" style="--bob:7.0s;--delay:-4.1s">
-        <img src="graphics/unicorn/unicorn-float.svg" alt="" class="mirrored">
-      </div>
-    </div>
-    <div class="drift" style="left:58%;top:57%;width:28vw;--drift:25s;--delay:-0.6s">
-      <div class="bob" style="--bob:8.4s;--delay:-0.6s">
-        <img src="graphics/unicorn/unicorn-float.svg" alt="" class="mirrored">
-      </div>
-    </div>
-    <div class="drift" style="left:35%;top:76%;width:13vw;--drift:15s;--delay:-2.9s">
-      <div class="bob" style="--bob:5.2s;--delay:-2.9s">
-        <img src="graphics/unicorn/unicorn-float.svg" alt="">
-      </div>
-    </div>
-  </div>
+  <svg class="waves" id="waves" aria-hidden="true"></svg>
+  <div class="stage" id="stage" aria-hidden="true"></div>
   <div class="lettering">
-    <img src="graphics/lettering/lettering.svg" alt="'Nen Scheiss muss ich!">
+    <picture>
+      <source media="(orientation: portrait)" srcset="graphics/lettering/lettering-stacked.svg">
+      <img src="graphics/lettering/lettering.svg" alt="'Nen Scheiss muss ich!">
+    </picture>
   </div>
   <footer class="backlink">
     <a href="https://flowkap.dev">flowkap.dev</a>
     ·
     <a href="https://flowkap.dev/imprint/">Imprint</a>
+    <button class="info-button" type="button" id="details-open" aria-haspopup="dialog" aria-label="Details">?</button>
   </footer>
+  <dialog class="details" id="details" aria-label="Details">
+    <div class="details-body">
+      <p>Original von Flowkap: <a href="graphics/original/original.png">Link</a></p>
+      <p>Coffeeware: Nimm's gern her – wenn's dir gefällt, spendier mir einen Kaffee ☕</p>
+      <form method="dialog"><button>Schließen</button></form>
+    </div>
+  </dialog>
+  <script>
+    (() => {
+      const details = document.getElementById("details");
+      document.getElementById("details-open").addEventListener("click", () => details.showModal());
+      // a click outside the body lands on the dialog element itself, i.e. the backdrop
+      details.addEventListener("click", (event) => {
+        if (event.target === details) details.close();
+      });
+
+      const stage = document.getElementById("stage");
+      const UNICORN = "graphics/unicorn/unicorn-float.svg";
+      const RATIO = 410 / 545;
+      // relative widths of the three size classes
+      const LARGE = 1;
+      const MEDIUM = 0.7;
+      const SMALL = 0.45;
+
+      const seeded = (seed) => () => {
+        seed = (seed * 1664525 + 1013904223) % 4294967296;
+        return seed / 4294967296;
+      };
+      const box = (rect, pad) => ({
+        l: rect.left - pad, t: rect.top - pad, r: rect.right + pad, b: rect.bottom + pad,
+      });
+      const overlaps = (a, b) => a.l < b.r && a.r > b.l && a.t < b.b && a.b > b.t;
+
+      // new arrangement on every page load, stable while the window is resized
+      const layoutSeed = Math.floor(Math.random() * 4294967296);
+      const centre = (b) => [(b.l + b.r) / 2, (b.t + b.b) / 2];
+
+      const waves = document.getElementById("waves");
+      const SVG_NS = "http://www.w3.org/2000/svg";
+
+      function wavePath(x, y, w, amp) {
+        const step = w / 3;
+        let d = `M${x} ${y + amp}`;
+        for (let i = 0; i < 3; i++) {
+          const x0 = x + i * step;
+          d += ` C${x0 + step * 0.25} ${y - amp}, ${x0 + step * 0.5} ${y - amp}, ${x0 + step * 0.6} ${y + amp * 0.2}` +
+            ` S${x0 + step * 0.9} ${y + amp}, ${x0 + step} ${y + amp * 0.1}`;
+        }
+        return d;
+      }
+
+      // jittered grid: one wave per cell at a random spot, so they scatter but cover evenly
+      function drawWaves(width, height, random) {
+        // as many waves as the original picture has
+        const target = 22;
+        const cell = Math.sqrt((width * height) / target);
+        const cols = Math.max(2, Math.round(width / cell));
+        const rows = Math.ceil(target / cols);
+        const cellW = width / cols;
+        const cellH = height / rows;
+        waves.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        waves.style.setProperty("--stroke", `${Math.min(7, Math.max(4, width / 250)).toFixed(1)}px`);
+        waves.replaceChildren();
+        // the grid can have a few more cells than waves; leave random ones empty
+        const cells = [];
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col < cols; col++) cells.push([col, row]);
+        }
+        for (let i = cells.length - 1; i > 0; i--) {
+          const j = Math.floor(random() * (i + 1));
+          [cells[i], cells[j]] = [cells[j], cells[i]];
+        }
+        for (const [col, row] of cells.slice(0, target)) {
+          const w = Math.min(cellW * 0.85, Math.max(90, width * (0.075 + random() * 0.07)));
+          const x = col * cellW + random() * (cellW - w);
+          const y = row * cellH + cellH * (0.25 + random() * 0.5);
+          const path = document.createElementNS(SVG_NS, "path");
+          path.setAttribute("class", "wave");
+          path.setAttribute("d", wavePath(x, y, w, w * 0.04));
+          path.style.cssText = `--d:${(5 + random() * 4).toFixed(1)}s;--delay:-${(random() * 6).toFixed(1)}s;` +
+            `--dx:${((random() < 0.5 ? -1 : 1) * w * (0.06 + random() * 0.08)).toFixed(0)}px`;
+          waves.append(path);
+        }
+      }
+
+      function layout() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        drawWaves(width, height, seeded(layoutSeed + 1));
+        const random = seeded(layoutSeed);
+        const blocked = [".lettering", ".backlink"].map(
+          (selector) => box(document.querySelector(selector).getBoundingClientRect(), 12));
+        const base = Math.sqrt(width * height) * 0.3;
+        const placed = [];
+        stage.replaceChildren();
+
+        // more room, more unicorns: 5 on a phone up to 7 from a Full HD screen on
+        const count = Math.min(7, Math.max(5, Math.round(5 + (Math.sqrt(width * height) - 575) / 433)));
+        // mix of 2 large : 2 medium : 1 small, largest placed first;
+        // a slight spread within a class keeps equal sizes from looking cloned
+        const large = Math.round(count * 0.4);
+        const small = Math.max(1, Math.round(count * 0.2));
+        const medium = count - large - small;
+        const spread = (factor, n) => Array.from({ length: n }, (_, i) => factor * (1 - i * 0.06));
+        const factors = [...spread(LARGE, large), ...spread(MEDIUM, medium), ...spread(SMALL, small)];
+        for (const factor of factors) {
+          let spot = null;
+          // shrink a unicorn a little before giving up on it
+          for (let size = base * factor, attempt = 0; attempt < 3 && !spot; attempt++, size *= 0.85) {
+            const w = size;
+            const h = size * RATIO;
+            // margin covers the sideways drift and the tilt of the bobbing
+            const margin = w * 0.1;
+            // best-candidate sampling: of several free random spots take the one farthest
+            // from the unicorns already placed, so they spread evenly instead of clumping
+            let bestDistance = -1;
+            for (let i = 0, found = 0; i < 300 && found < 12; i++) {
+              // keep the whole unicorn, including its drift and tilt, inside the viewport
+              const x = margin + random() * (width - w - 2 * margin);
+              const y = margin + random() * (height - h - 2 * margin);
+              const candidate = { l: x - margin, t: y - margin, r: x + w + margin, b: y + h + margin };
+              if (blocked.some((b) => overlaps(candidate, b)) || placed.some((b) => overlaps(candidate, b))) continue;
+              found++;
+              const [cx, cy] = centre(candidate);
+              const distance = Math.min(Infinity, ...placed.map((b) => {
+                const [px, py] = centre(b);
+                return Math.hypot(cx - px, cy - py);
+              }));
+              if (distance > bestDistance) {
+                bestDistance = distance;
+                spot = { x, y, w, candidate };
+              }
+            }
+          }
+          if (!spot) continue;
+          placed.push(spot.candidate);
+
+          const delay = `-${(random() * 10).toFixed(1)}s`;
+          const drift = document.createElement("div");
+          drift.className = "drift";
+          drift.style.cssText = `left:${spot.x}px;top:${spot.y}px;width:${spot.w}px;` +
+            `--amp:${(spot.w * 0.06).toFixed(1)}px;--drift:${(15 + random() * 10).toFixed(1)}s;--delay:${delay}`;
+          const bob = document.createElement("div");
+          bob.className = "bob";
+          bob.style.cssText = `--bob:${(5 + random() * 3.5).toFixed(1)}s;--delay:${delay}`;
+          const img = document.createElement("img");
+          img.src = UNICORN;
+          img.alt = "";
+          if (random() < 0.5) img.className = "mirrored";
+          bob.append(img);
+          drift.append(bob);
+          stage.append(drift);
+        }
+      }
+
+      let pending;
+      window.addEventListener("resize", () => {
+        clearTimeout(pending);
+        pending = setTimeout(layout, 150);
+      });
+      window.addEventListener("load", layout);
+    })();
+  </script>
 </body>
 </html>
