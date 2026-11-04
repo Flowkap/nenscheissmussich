@@ -1,8 +1,9 @@
 // Network first so a new deploy shows up right away; the cache only serves when offline.
-const CACHE = "nenscheissmussich-v1";
+const CACHE = "nenscheissmussich-v2";
 const PRECACHE = [
   "./",
   "index.html",
+  "letters.js",
   "manifest.webmanifest",
   "graphics/unicorn/unicorn-float.svg",
   "graphics/lettering/lettering.svg",

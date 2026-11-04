@@ -18,6 +18,12 @@ together with [Claude Code](https://claude.com/claude-code).
 - On every page load a small script scatters the waves and places 5–7 unicorns of mixed sizes
   so that they never overlap each other, the lettering or the footer. Each unicorn bobs, tilts and
   drifts at its own pace. Visitors who prefer reduced motion get a still page.
+- The ✎ button builds a link with your own text in the URL hash, e.g.
+  `nenscheissmussi.ch/#Die%20Steuererkl%C3%A4rung%20machen`. Whoever opens it sees that text in the
+  lettering style for five seconds; then the letters swirl around the screen, turn into the letters
+  of "'Nen Scheiss muss ich!" on the way and settle into it. Surplus letters vanish in the swirl,
+  missing ones appear from it. Up to 80 characters: letters A–Z, Ä, Ö, Ü, ẞ, digits and common
+  punctuation; anything else is dropped. With reduced motion the text simply fades over.
 - Installable as a web app (PWA): `manifest.webmanifest` plus a network-first service worker
   (`sw.js`) that only serves from cache when offline.
 
@@ -25,6 +31,7 @@ together with [Claude Code](https://claude.com/claude-code).
 
 ```
 index.html              the page
+letters.js              glyphs, layout and swirl for a custom text from the URL hash
 manifest.webmanifest    web app manifest
 sw.js                   service worker
 CNAME                   custom domain for GitHub Pages

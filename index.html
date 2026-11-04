@@ -81,6 +81,33 @@
       animation: lettering 4.5s ease-in-out infinite;
     }
     .lettering img { display: block; width: 100%; height: auto; }
+    .letters {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .letters g { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .letters .sway {
+      transform-box: view-box;
+      transform-origin: 50% 47%;
+      animation: sway 4.5s ease-in-out infinite;
+    }
+    @keyframes sway {
+      0%, 100% { transform: rotate(-0.6deg); }
+      50%      { transform: translateY(-2vh) rotate(0.6deg); }
+    }
+    /* the static lettering keeps its place so the unicorns still keep clear of it */
+    .custom .lettering { visibility: hidden; }
+    /* with a custom text the unicorns surface one after another once the lettering has settled */
+    .custom .drift {
+      opacity: 0;
+      translate: 0 40px;
+      transition: opacity 1.4s ease-out, translate 1.8s ease-out;
+      transition-delay: calc(var(--n) * 0.3s);
+    }
+    .custom.settled .drift { opacity: 1; translate: 0 0; }
     @keyframes lettering {
       0%, 100% { transform: translate(-50%, -50%) rotate(-0.6deg); }
       50%      { transform: translate(-50%, -54%) rotate(0.6deg); }
@@ -142,6 +169,19 @@
       gap: 12px;
     }
     .details-footer form { margin: 0; }
+    .details-body label { display: block; margin: 0 0 4px; font-weight: 700; }
+    .details-body input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 2px solid currentColor;
+      border-radius: 12px;
+      background: #fff;
+      color: inherit;
+      font: inherit;
+    }
+    .compose-left { margin: 4px 0 12px; font-size: 0.85rem; text-align: right; }
+    .compose-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+    .details-body button:disabled { opacity: 0.4; cursor: default; }
     .details-body button {
       padding: 6px 16px;
       border: 2px solid currentColor;
@@ -155,6 +195,7 @@
       .lettering { top: 46%; width: 88vw; }
     }
     @media (prefers-reduced-motion: reduce) {
+      .custom .drift { translate: none; }
       * { animation: none !important; }
     }
   </style>
@@ -168,10 +209,12 @@
       <img src="graphics/lettering/lettering.svg" alt="'Nen Scheiss muss ich!">
     </picture>
   </div>
+  <svg class="letters" id="letters" role="img" aria-hidden="true"></svg>
   <footer class="backlink">
     <a href="https://flowkap.dev">flowkap.dev</a>
     ·
     <a href="https://flowkap.dev/imprint/">Imprint</a>
+    <button class="info-button" type="button" id="compose-open" aria-haspopup="dialog" aria-label="Eigenen Text verschicken">✎</button>
     <button class="info-button" type="button" id="details-open" aria-haspopup="dialog" aria-label="Details">?</button>
   </footer>
   <dialog class="details" id="details" aria-label="Details">
@@ -188,6 +231,20 @@
       </div>
     </div>
   </dialog>
+  <dialog class="details" id="compose" aria-label="Eigenen Text verschicken">
+    <form class="details-body" id="compose-form">
+      <p>Was sollst oder musst du? Schreib's rein, daraus wird ein Link. Wer ihn öffnet, sieht erst deinen Text – dann wirbeln die Buchstaben durcheinander und sortieren sich neu.</p>
+      <label for="compose-text">Was soll ich?</label>
+      <input id="compose-text" type="text" autocomplete="off" placeholder="Die Steuererklärung machen">
+      <p class="compose-left" id="compose-left"></p>
+      <div class="compose-actions">
+        <button type="button" id="compose-share">Link teilen</button>
+        <button type="submit" id="compose-view">Ansehen</button>
+        <button type="button" onclick="this.closest('dialog').close()">Schließen</button>
+      </div>
+    </form>
+  </dialog>
+  <script src="letters.js"></script>
   <script>
     (() => {
       const details = document.getElementById("details");
@@ -317,11 +374,12 @@
           }
           if (!spot) continue;
           placed.push(spot.candidate);
+          const order = placed.length - 1;
 
           const delay = `-${(random() * 10).toFixed(1)}s`;
           const drift = document.createElement("div");
           drift.className = "drift";
-          drift.style.cssText = `left:${spot.x}px;top:${spot.y}px;width:${spot.w}px;` +
+          drift.style.cssText = `left:${spot.x}px;top:${spot.y}px;width:${spot.w}px;--n:${order};` +
             `--amp:${(spot.w * 0.06).toFixed(1)}px;--drift:${(15 + random() * 10).toFixed(1)}s;--delay:${delay}`;
           const bob = document.createElement("div");
           bob.className = "bob";
