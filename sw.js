@@ -1,5 +1,5 @@
 // Network first so a new deploy shows up right away; the cache only serves when offline.
-const CACHE = "nenscheissmussich-v2";
+const CACHE = "nenscheissmussich-v3";
 const PRECACHE = [
   "./",
   "index.html",
@@ -29,7 +29,8 @@ self.addEventListener("fetch", (event) => {
   const { request } = event;
   if (request.method !== "GET" || new URL(request.url).origin !== self.location.origin) return;
   event.respondWith(
-    fetch(request)
+    // revalidate with the server, so the HTTP cache never mixes an old file into a new deploy
+    fetch(request, { cache: "no-cache" })
       .then((response) => {
         const copy = response.clone();
         caches.open(CACHE).then((cache) => cache.put(request, copy));
