@@ -404,6 +404,8 @@
   }
 
   function fromHash() {
+    // reserved for the imprint and privacy dialogs, not a custom text
+    if (location.hash === "#impressum" || location.hash === "#datenschutz") return;
     let text = "";
     try {
       text = tidy(decodeURIComponent(location.hash.slice(1)));

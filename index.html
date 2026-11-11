@@ -11,7 +11,7 @@
   <link rel="apple-touch-icon" href="graphics/icon/apple-touch-icon.png">
   <link rel="manifest" href="manifest.webmanifest">
   <!-- before the first paint, so neither the unicorns nor the static lettering flash up -->
-  <script>if (location.hash.length > 1) document.documentElement.classList.add("custom");</script>
+  <script>if (location.hash.length > 1 && !["#impressum", "#datenschutz"].includes(location.hash)) document.documentElement.classList.add("custom");</script>
   <meta name="theme-color" content="#e8e9f5">
   <meta name="apple-mobile-web-app-title" content="Nen Scheiss">
   <style>
@@ -126,7 +126,7 @@
       align-items: center;
       gap: 8px;
       transform: translateX(-50%);
-      padding: 4px 6px 4px 14px;
+      padding: 4px 14px;
       border-radius: 999px;
       background: rgba(232, 233, 245, 0.88);
       color: #2b1d26;
@@ -134,17 +134,28 @@
       white-space: nowrap;
     }
     .backlink a { color: inherit; }
-    .info-button {
-      width: 24px;
-      height: 24px;
-      padding: 0;
-      border: 2px solid currentColor;
-      border-radius: 50%;
-      background: none;
-      color: inherit;
-      font: 700 0.8rem/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      cursor: pointer;
+    .corner-actions {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 2;
+      display: flex;
+      gap: 10px;
     }
+    .info-button {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: 2px solid #2b1d26;
+      border-radius: 50%;
+      background: rgba(232, 233, 245, 0.88);
+      color: #2b1d26;
+      font: 700 1.15rem/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(43, 29, 38, 0.15);
+      transition: transform 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .info-button:hover, .info-button:focus-visible { background: #ff8fcf; border-color: #ff8fcf; color: #fff; transform: translateY(-2px); }
     .details {
       max-width: min(560px, calc(100vw - 32px));
       max-height: calc(100vh - 32px);
@@ -185,6 +196,69 @@
       color: inherit;
       font: inherit;
     }
+    .imprint {
+      width: min(720px, calc(100vw - 32px));
+      max-width: none;
+      max-height: calc(100dvh - 32px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      border-radius: 22px;
+      background: rgba(248, 248, 253, 0.97);
+      box-shadow: 0 24px 60px -12px rgba(43, 29, 38, 0.45), 0 0 0 1px rgba(43, 29, 38, 0.06);
+    }
+    .imprint::backdrop { background: rgba(43, 29, 38, 0.4); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+    .imprint[open] { animation: imprint-in 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+    @keyframes imprint-in { from { opacity: 0; transform: translateY(16px) scale(0.97); } }
+    .imprint-head {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px 16px 24px;
+      background: inherit;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .imprint-head::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #ff8fcf, #b79cff 50%, var(--wave));
+    }
+    .imprint-head h2 { margin: 0; font-size: 1.25rem; letter-spacing: -0.01em; }
+    .imprint-head form { margin: 0; }
+    .imprint .imprint-close {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(43, 29, 38, 0.07);
+      color: inherit;
+      font: 400 1.5rem/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.2s;
+    }
+    .imprint .imprint-close:hover { background: #ff8fcf; color: #fff; transform: rotate(90deg); }
+    .imprint-body { padding: 4px 24px 20px; font-size: 0.875rem; line-height: 1.55; }
+    .imprint-body p { margin-bottom: 8px; }
+    .imprint-body h3 {
+      margin: 14px 0 4px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #b14e8c;
+    }
+    .imprint-body p { color: rgba(43, 29, 38, 0.82); }
+    .imprint-body h3 + h4 { margin-top: 6px; }
+    .imprint-body h4 { margin: 12px 0 2px; font-size: 0.9rem; }
     .compose-left { margin: 4px 0 12px; font-size: 0.85rem; text-align: right; }
     .compose-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
     .details-body button:disabled { opacity: 0.4; cursor: default; }
@@ -219,10 +293,14 @@
   <footer class="backlink">
     <a href="https://flowkap.dev">flowkap.dev</a>
     ·
-    <a href="https://flowkap.dev/imprint/">Imprint</a>
+    <a href="#impressum" aria-haspopup="dialog">Impressum</a>
+    ·
+    <a href="#datenschutz" aria-haspopup="dialog">Datenschutz</a>
+  </footer>
+  <div class="corner-actions">
     <button class="info-button" type="button" id="compose-open" aria-haspopup="dialog" aria-label="Eigenen Text verschicken">✎</button>
     <button class="info-button" type="button" id="details-open" aria-haspopup="dialog" aria-label="Details">?</button>
-  </footer>
+  </div>
   <dialog class="details" id="details" aria-label="Details">
     <div class="details-body">
       <p>Wenn du mal wieder das Gefühl hast, jemandem einfach sagen zu müssen: „Nein, mach ich nicht.“ – dann ist das hier die Seite, die du nutzen kannst.</p>
@@ -235,6 +313,46 @@
         <a href="https://github.com/Flowkap/nenscheissmussich">Quellcode auf GitHub</a>
         <form method="dialog"><button>Schließen</button></form>
       </div>
+    </div>
+  </dialog>
+  <dialog class="details imprint" id="impressum" aria-labelledby="impressum-title">
+    <div class="imprint-head">
+      <h2 id="impressum-title">Impressum</h2>
+      <form method="dialog"><button class="imprint-close" aria-label="Schließen">×</button></form>
+    </div>
+    <div class="details-body imprint-body">
+      <p>Private, nicht kommerzielle Website.</p>
+      <p>Florian Kappes<br>Töpferstraße 5<br>54313 Zemmer<br>Deutschland</p>
+      <p>E-Mail: <a href="mailto:contact@flowkap.dev">contact@flowkap.dev</a></p>
+      <h3>Haftung für Inhalte</h3>
+      <p>Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden. Für eigene Inhalte bin ich nach den allgemeinen Gesetzen verantwortlich. Eine Verpflichtung, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen, besteht nicht. Bei Bekanntwerden von Rechtsverletzungen werden entsprechende Inhalte umgehend entfernt.</p>
+      <h3>Haftung für Links</h3>
+      <p>Diese Seite enthält Links zu externen Webseiten Dritter, auf deren Inhalte ich keinen Einfluss habe. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber verantwortlich. Zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar. Bei Bekanntwerden von Rechtsverletzungen werden derartige Links umgehend entfernt.</p>
+      <h3>Urheberrecht</h3>
+      <p>Die Inhalte und Werke auf dieser Seite unterliegen dem deutschen Urheberrecht. Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der vorherigen schriftlichen Zustimmung des jeweiligen Rechteinhabers. Ausgenommen ist die Coffeeware-Freigabe unter „?“.</p>
+    </div>
+  </dialog>
+  <dialog class="details imprint" id="datenschutz" aria-labelledby="datenschutz-title">
+    <div class="imprint-head">
+      <h2 id="datenschutz-title">Datenschutzerklärung</h2>
+      <form method="dialog"><button class="imprint-close" aria-label="Schließen">×</button></form>
+    </div>
+    <div class="details-body imprint-body">
+      <h4>Verantwortlicher</h4>
+      <p>Florian Kappes, Töpferstraße 5, 54313 Zemmer, E-Mail: <a href="mailto:contact@flowkap.dev">contact@flowkap.dev</a></p>
+      <h4>Hosting</h4>
+      <p>Diese Website wird über GitHub Pages der GitHub, Inc. (USA) bereitgestellt. Beim Aufruf protokolliert GitHub nach eigenen Angaben Ihre IP-Adresse zu Sicherheitszwecken. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; mein berechtigtes Interesse ist eine sichere und stabile Bereitstellung der Website. Eine Speicherdauer nennt GitHub nicht. Dabei können Daten in die USA übermittelt werden; GitHub ist nach dem EU-US Data Privacy Framework zertifiziert. Details finden Sie in der <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">Datenschutzerklärung von GitHub</a>.</p>
+      <h4>Keine Cookies, kein Tracking</h4>
+      <p>Diese Website setzt keine Cookies, verwendet keine Analyse- oder Tracking-Werkzeuge und lädt keine Inhalte von Drittanbietern wie Schriftarten, Skripte oder eingebettete Videos.</p>
+      <h4>Offline-Speicher und eigene Texte</h4>
+      <p>Damit die Seite auch offline funktioniert, legt Ihr Browser die Dateien dieser Website (Seite, Grafiken, Skripte) in seinem lokalen Cache ab. Personenbezogene Daten werden dabei nicht gespeichert. Ein eigener Text, den Sie über „✎“ erstellen, steht nur in der Adresse hinter dem „#“ und wird nicht an den Server übertragen.</p>
+      <h4>Kontakt per E-Mail</h4>
+      <p>Wenn Sie mir eine E-Mail schreiben, verarbeite ich Ihre Angaben (z. B. Name, E-Mail-Adresse, Inhalt der Nachricht) zur Bearbeitung Ihrer Anfrage. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; mein berechtigtes Interesse ist die Beantwortung Ihrer Anfrage. Ihre E-Mail wird über den E-Mail-Dienst von INWX (Berlin) an mein Postfach weitergeleitet. Die Daten werden gelöscht, sobald sie nicht mehr benötigt werden und keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</p>
+      <h4>Links zu externen Angeboten</h4>
+      <p>Diese Website enthält einfache Links zu GitHub und flowkap.dev. Beim bloßen Besuch dieser Website werden keine Daten an diese Anbieter übertragen. Erst wenn Sie einen Link anklicken, gelangen Sie auf die Seite des jeweiligen Anbieters; dort gelten dessen Datenschutzbestimmungen.</p>
+      <h4>Ihre Rechte</h4>
+      <p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16 DSGVO), Löschung (Art. 17 DSGVO), Einschränkung der Verarbeitung (Art. 18 DSGVO), Datenübertragbarkeit (Art. 20 DSGVO) sowie auf Widerspruch gegen Verarbeitungen auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (Art. 21 DSGVO). Schreiben Sie mir dazu einfach eine E-Mail. Außerdem können Sie sich bei einer Datenschutz-Aufsichtsbehörde beschweren; zuständig ist der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Rheinland-Pfalz (<a href="https://www.datenschutz.rlp.de" target="_blank" rel="noopener">datenschutz.rlp.de</a>).</p>
+      <p>Stand: November 2026</p>
     </div>
   </dialog>
   <dialog class="details" id="compose" aria-label="Eigenen Text verschicken">
@@ -259,6 +377,37 @@
       details.addEventListener("click", (event) => {
         if (event.target === details) details.close();
       });
+
+      // #impressum and #datenschutz are reserved for these dialogs (see letters.js)
+      const legalIds = ["impressum", "datenschutz"];
+      const legalDialogs = legalIds.map((id) => document.getElementById(id));
+      const openLegal = (id) => {
+        legalDialogs.forEach((dialog) => { if (dialog.open && dialog.id !== id) dialog.close(); });
+        const dialog = document.getElementById(id);
+        if (!dialog.open) dialog.showModal();
+      };
+      legalIds.forEach((id) => document.querySelectorAll(`a[href="#${id}"]`).forEach((link) => {
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          // keep a custom text in the URL; only an empty or legal hash becomes the bookmark
+          if (!location.hash || legalIds.includes(location.hash.slice(1))) history.replaceState(null, "", `#${id}`);
+          openLegal(id);
+        });
+      }));
+      legalDialogs.forEach((dialog) => {
+        dialog.addEventListener("click", (event) => {
+          if (event.target === dialog) dialog.close();
+        });
+        dialog.addEventListener("close", () => {
+          if (location.hash === `#${dialog.id}`) history.replaceState(null, "", location.pathname + location.search);
+        });
+      });
+      const syncLegal = () => {
+        const id = location.hash.slice(1);
+        if (legalIds.includes(id)) openLegal(id);
+      };
+      window.addEventListener("hashchange", syncLegal);
+      syncLegal();
 
       const stage = document.getElementById("stage");
       const UNICORN = "graphics/unicorn/unicorn-float.svg";
@@ -334,7 +483,7 @@
         const height = window.innerHeight;
         drawWaves(width, height, seeded(layoutSeed + 1));
         const random = seeded(layoutSeed);
-        const blocked = [".lettering", ".backlink"].map(
+        const blocked = [".lettering", ".backlink", ".corner-actions"].map(
           (selector) => box(document.querySelector(selector).getBoundingClientRect(), 12));
         const base = Math.sqrt(width * height) * 0.3;
         const placed = [];
