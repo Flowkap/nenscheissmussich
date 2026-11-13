@@ -12,18 +12,64 @@
   <link rel="manifest" href="manifest.webmanifest">
   <!-- before the first paint, so neither the unicorns nor the static lettering flash up -->
   <script>if (location.hash.length > 1 && !["#impressum", "#datenschutz"].includes(location.hash)) document.documentElement.classList.add("custom");</script>
+  <!-- a shared link may ask for ?tag or ?nacht; otherwise sunrise and sunset decide. Never remembered. -->
+  <script>(() => {
+    // sunrise equation for a fixed spot in the middle of Germany; no location is asked for
+    const LAT = 51.16;
+    const LON = 10.45;
+    const rad = Math.PI / 180;
+    const now = Date.now();
+    const days = Math.round(now / 86400000 + 2440587.5 - 2451545 - 0.0008);
+    const mean = days - LON / 360;
+    const anomaly = (357.5291 + 0.98560028 * mean) % 360 * rad;
+    const centre = 1.9148 * Math.sin(anomaly) + 0.02 * Math.sin(2 * anomaly) + 0.0003 * Math.sin(3 * anomaly);
+    const ecliptic = (anomaly / rad + centre + 282.9372) % 360 * rad;
+    const transit = 2451545 + mean + 0.0053 * Math.sin(anomaly) - 0.0069 * Math.sin(2 * ecliptic);
+    const declination = Math.asin(Math.sin(ecliptic) * Math.sin(23.4397 * rad));
+    const halfDay = Math.acos((Math.sin(-0.833 * rad) - Math.sin(LAT * rad) * Math.sin(declination)) /
+      (Math.cos(LAT * rad) * Math.cos(declination))) / rad / 360;
+    const toMs = (julian) => (julian - 2440587.5) * 86400000;
+    const dark = now < toMs(transit - halfDay) || now > toMs(transit + halfDay);
+    const params = new URLSearchParams(location.search);
+    const night = params.has("nacht") || (!params.has("tag") && dark);
+    document.documentElement.dataset.theme = night ? "night" : "day";
+  })();</script>
   <meta name="theme-color" content="#e8e9f5">
   <meta name="apple-mobile-web-app-title" content="Nen Scheiss">
   <style>
     :root {
       --paper: #e8e9f5;
+      --sky: var(--paper);
       --wave: #5b8fd6;
+      --ink: #2b1d26;
+      --glass: rgba(232, 233, 245, 0.88);
+      --sheet: #e8e9f5;
+      --sheet-strong: rgba(248, 248, 253, 0.97);
+      --field: #fff;
+      --heading: #b14e8c;
+      --muted: rgba(43, 29, 38, 0.82);
+      --hover-tint: rgba(43, 29, 38, 0.07);
+    }
+    :root[data-theme="night"] {
+      color-scheme: dark;
+      --paper: #141233;
+      --sky: radial-gradient(ellipse 120% 80% at 50% 115%, #4a2f7a 0%, #231b52 40%, #0c0b24 100%);
+      --wave: #8fb4ff;
+      --ink: #f4ecff;
+      --glass: rgba(28, 23, 66, 0.82);
+      --sheet: #1f1a47;
+      --sheet-strong: rgba(31, 26, 71, 0.97);
+      --field: #141233;
+      --heading: #ff9ad8;
+      --muted: rgba(244, 236, 255, 0.82);
+      --hover-tint: rgba(244, 236, 255, 0.1);
     }
     * { box-sizing: border-box; }
     html, body { height: 100%; margin: 0; }
     body {
       overflow: hidden;
-      background: var(--paper);
+      background: var(--sky);
+      background-color: var(--paper);
     }
     .waves {
       position: fixed;
@@ -128,8 +174,8 @@
       transform: translateX(-50%);
       padding: 4px 14px;
       border-radius: 999px;
-      background: rgba(232, 233, 245, 0.88);
-      color: #2b1d26;
+      background: var(--glass);
+      color: var(--ink);
       font: 0.85rem/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       white-space: nowrap;
     }
@@ -146,10 +192,10 @@
       width: 44px;
       height: 44px;
       padding: 0;
-      border: 2px solid #2b1d26;
+      border: 2px solid var(--ink);
       border-radius: 50%;
-      background: rgba(232, 233, 245, 0.88);
-      color: #2b1d26;
+      background: var(--glass);
+      color: var(--ink);
       font: 700 1.15rem/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(43, 29, 38, 0.15);
@@ -162,8 +208,8 @@
       padding: 0;
       border: 0;
       border-radius: 16px;
-      background: #e8e9f5;
-      color: #2b1d26;
+      background: var(--sheet);
+      color: var(--ink);
       box-shadow: 0 12px 40px rgba(43, 29, 38, 0.3);
       font: 1rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     }
@@ -192,7 +238,7 @@
       padding: 8px 12px;
       border: 2px solid currentColor;
       border-radius: 12px;
-      background: #fff;
+      background: var(--field);
       color: inherit;
       font: inherit;
     }
@@ -204,7 +250,7 @@
       overscroll-behavior: contain;
       scrollbar-width: thin;
       border-radius: 22px;
-      background: rgba(248, 248, 253, 0.97);
+      background: var(--sheet-strong);
       box-shadow: 0 24px 60px -12px rgba(43, 29, 38, 0.45), 0 0 0 1px rgba(43, 29, 38, 0.06);
     }
     .imprint::backdrop { background: rgba(43, 29, 38, 0.4); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
@@ -240,7 +286,7 @@
       padding: 0;
       border: 0;
       border-radius: 50%;
-      background: rgba(43, 29, 38, 0.07);
+      background: var(--hover-tint);
       color: inherit;
       font: 400 1.5rem/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       cursor: pointer;
@@ -254,11 +300,13 @@
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: #b14e8c;
+      color: var(--heading);
     }
-    .imprint-body p { color: rgba(43, 29, 38, 0.82); }
+    .imprint-body p { color: var(--muted); }
     .imprint-body h3 + h4 { margin-top: 6px; }
     .imprint-body h4 { margin: 12px 0 2px; font-size: 0.9rem; }
+    .details-body .compose-night { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-weight: 400; cursor: pointer; }
+    .details-body .compose-night input { width: 1.1em; height: 1.1em; margin: 0; accent-color: #b14e8c; }
     .compose-left { margin: 4px 0 12px; font-size: 0.85rem; text-align: right; }
     .compose-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
     .details-body button:disabled { opacity: 0.4; cursor: default; }
@@ -271,6 +319,167 @@
       font: inherit;
       cursor: pointer;
     }
+    /* night: sky, fairies, dust and a little shimmer on unicorns and lettering (see night.js) */
+    .night-sky, .fairy-dust, .zzz { display: none; }
+    [data-theme="night"] .night-sky,
+    [data-theme="night"] .fairy-dust { display: block; }
+    /* sun by day, moon by night, on the same spot, so toggling moves no unicorn */
+    .celestial {
+      position: fixed;
+      top: 5vh;
+      left: 6vw;
+      width: clamp(64px, 11vmin, 130px);
+      aspect-ratio: 1;
+      pointer-events: none;
+    }
+    .moon, .sun { position: absolute; inset: 0; }
+    [data-theme="night"] .sun, :root:not([data-theme="night"]) .moon { visibility: hidden; }
+    .sun { width: 100%; height: 100%; overflow: visible; }
+    .sun .rays, .sun .face {
+      transform-box: view-box;
+      transform-origin: 50% 50%;
+      animation: sun-nod 5s ease-in-out infinite alternate;
+    }
+    @keyframes sun-nod {
+      from { transform: rotate(-6deg); }
+      to   { transform: rotate(6deg); }
+    }
+    [data-theme="night"] .zzz { display: flex; }
+    .night-sky, .fairy-dust { position: fixed; inset: 0; overflow: hidden; pointer-events: none; }
+    .fairy-dust { z-index: 1; }
+    .moon {
+      inset: 10%;
+      border-radius: 50%;
+      box-shadow: inset calc(clamp(64px, 11vmin, 130px) * -0.22) calc(clamp(64px, 11vmin, 130px) * -0.06) 0 #fff3c4;
+      filter: drop-shadow(0 0 18px rgba(255, 236, 170, 0.7)) drop-shadow(0 0 50px rgba(255, 210, 240, 0.35));
+      transform: rotate(-20deg);
+      animation: moon-glow 6s ease-in-out infinite alternate;
+    }
+    @keyframes moon-glow { to { filter: drop-shadow(0 0 26px rgba(255, 236, 170, 0.9)) drop-shadow(0 0 70px rgba(255, 210, 240, 0.5)); } }
+    .star {
+      position: absolute;
+      width: var(--s);
+      height: var(--s);
+      border-radius: 50%;
+      background: #fff;
+      animation: star-twinkle var(--t) ease-in-out var(--delay) infinite;
+    }
+    @keyframes star-twinkle {
+      0%, 100% { opacity: 0.25; }
+      50%      { opacity: 1; box-shadow: 0 0 6px #fff; }
+    }
+    /* four-pointed glint */
+    .glint {
+      position: absolute;
+      width: var(--s);
+      height: var(--s);
+      background: var(--c);
+      clip-path: polygon(50% 0, 58% 42%, 100% 50%, 58% 58%, 50% 100%, 42% 58%, 0 50%, 42% 42%);
+      filter: drop-shadow(0 0 4px var(--c));
+      transform: scale(0);
+      animation: glint var(--t) ease-in-out var(--delay) infinite;
+      will-change: transform;
+    }
+    @keyframes glint {
+      0%, 40%, 100% { transform: scale(0) rotate(0deg); }
+      65%           { transform: scale(1) rotate(45deg); }
+      85%           { transform: scale(0.35) rotate(90deg); }
+    }
+    .firefly {
+      position: absolute;
+      width: var(--s);
+      height: var(--s);
+      border-radius: 50%;
+      background: radial-gradient(circle, #fffbe6 0%, var(--c) 45%, transparent 70%);
+      box-shadow: 0 0 calc(var(--s) * 2) var(--c);
+      opacity: 0;
+      animation: twinkle var(--t) ease-in-out var(--delay) infinite, float var(--f) ease-in-out var(--delay) infinite alternate;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; }
+      40%, 60% { opacity: 0.95; }
+    }
+    @keyframes float {
+      from { transform: translate(0, 0); }
+      to   { transform: translate(var(--fx), var(--fy)); }
+    }
+    .shooting-star {
+      position: absolute;
+      width: var(--len);
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255, 246, 194, 0.9) 85%, #fff);
+      transform-origin: 0 50%;
+      rotate: var(--angle);
+      filter: drop-shadow(0 0 4px #fff6c2);
+      animation: shoot 1.1s ease-out forwards;
+    }
+    @keyframes shoot {
+      from { opacity: 0; transform: translateX(-30%) scaleX(0.2); }
+      30%  { opacity: 1; }
+      to   { opacity: 0; transform: translateX(60%) scaleX(1); }
+    }
+    .fairy {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 1;
+      pointer-events: none;
+      filter: drop-shadow(0 0 4px #fff6c2) drop-shadow(0 0 12px rgba(255, 179, 230, 0.9)) drop-shadow(0 0 24px rgba(185, 211, 255, 0.6));
+    }
+    .fairy svg { display: block; width: 100%; height: auto; overflow: visible; }
+    .fairy .wing {
+      opacity: 0.85;
+      transform-box: view-box;
+      transform-origin: 50% 45%;
+      animation: flap 0.16s ease-in-out infinite alternate;
+    }
+    @keyframes flap { to { transform: scaleX(0.35); } }
+    .dust {
+      position: absolute;
+      width: var(--s);
+      height: var(--s);
+      border-radius: 50%;
+      background: var(--c);
+      box-shadow: 0 0 6px var(--c);
+      animation: dust var(--life) ease-out forwards;
+    }
+    .dust-star {
+      border-radius: 0;
+      clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+    }
+    @keyframes dust {
+      from { opacity: 1; transform: translate(0, 0) scale(1); }
+      to   { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.2) rotate(120deg); }
+    }
+    /* sleepy "z z Z" above the head; the head sits top right, or top left when mirrored */
+    .zzz {
+      position: absolute;
+      z-index: 1;
+      top: -14%;
+      right: 2%;
+      gap: 2px;
+      align-items: flex-end;
+      color: #f4ecff;
+      font: 700 clamp(10px, 2.2vmin, 22px)/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      text-shadow: 0 0 8px #b9d3ff;
+    }
+    .zzz.mirrored { right: auto; left: 2%; }
+    /* --delay comes from the bob, so the unicorns don't snore in unison */
+    .zzz span { opacity: 0; animation: zzz 4s ease-in-out var(--delay) infinite; }
+    .zzz span:nth-child(2) { font-size: 1.35em; animation-delay: calc(var(--delay) + 0.5s); }
+    .zzz span:nth-child(3) { font-size: 1.75em; animation-delay: calc(var(--delay) + 1s); }
+    @keyframes zzz {
+      0%   { opacity: 0; transform: translate(0, 10px); }
+      15%  { opacity: 1; }
+      75%  { opacity: 0.9; }
+      100% { opacity: 0; transform: translate(6px, -14px); }
+    }
+    [data-theme="night"] .waves { filter: drop-shadow(0 0 6px rgba(143, 180, 255, 0.55)); }
+    [data-theme="night"] .wave { opacity: 0.7; }
+    [data-theme="night"] .drift img { filter: drop-shadow(0 0 14px rgba(238, 127, 210, 0.45)); }
+    [data-theme="night"] .lettering,
+    [data-theme="night"] .letters { filter: drop-shadow(0 0 12px rgba(255, 226, 150, 0.4)); }
     @media (orientation: portrait) {
       .lettering { top: 46%; width: 88vw; }
     }
@@ -282,6 +491,36 @@
 </head>
 <body>
   <svg class="waves" id="waves" aria-hidden="true"></svg>
+  <div class="celestial" aria-hidden="true">
+    <svg class="sun" viewBox="-60 -60 120 120">
+      <g class="rays" fill="none" stroke-linecap="round">
+        <g stroke="#2b1d26" stroke-width="13">
+          <path id="sun-ray" d="M0 -44 V-55"/>
+          <use href="#sun-ray" transform="rotate(45)"/><use href="#sun-ray" transform="rotate(90)"/>
+          <use href="#sun-ray" transform="rotate(135)"/><use href="#sun-ray" transform="rotate(180)"/>
+          <use href="#sun-ray" transform="rotate(225)"/><use href="#sun-ray" transform="rotate(270)"/>
+          <use href="#sun-ray" transform="rotate(315)"/>
+        </g>
+        <g stroke="#f39a2b" stroke-width="7">
+          <use href="#sun-ray"/><use href="#sun-ray" transform="rotate(45)"/><use href="#sun-ray" transform="rotate(90)"/>
+          <use href="#sun-ray" transform="rotate(135)"/><use href="#sun-ray" transform="rotate(180)"/>
+          <use href="#sun-ray" transform="rotate(225)"/><use href="#sun-ray" transform="rotate(270)"/>
+          <use href="#sun-ray" transform="rotate(315)"/>
+        </g>
+      </g>
+      <g class="face">
+        <circle r="34" fill="#f2d43a" stroke="#2b1d26" stroke-width="5"/>
+        <g fill="none" stroke="#2b1d26" stroke-width="4" stroke-linecap="round">
+          <path d="M-18 -6 C-14 -12 -6 -12 -2 -6 M2 -6 C6 -12 14 -12 18 -6"/>
+          <path d="M-14 8 C-8 18 8 18 14 8"/>
+        </g>
+        <circle cx="-20" cy="6" r="5" fill="#ff8fcf" opacity="0.6"/>
+        <circle cx="20" cy="6" r="5" fill="#ff8fcf" opacity="0.6"/>
+      </g>
+    </svg>
+    <div class="moon"></div>
+  </div>
+  <div class="night-sky" id="night-sky" aria-hidden="true"></div>
   <div class="stage" id="stage" aria-hidden="true"></div>
   <div class="lettering">
     <picture>
@@ -290,6 +529,7 @@
     </picture>
   </div>
   <svg class="letters" id="letters" role="img" aria-hidden="true"></svg>
+  <div class="fairy-dust" id="fairy-dust" aria-hidden="true"></div>
   <footer class="backlink">
     <a href="https://flowkap.dev">flowkap.dev</a>
     ·
@@ -298,6 +538,7 @@
     <a href="#datenschutz" aria-haspopup="dialog">Datenschutz</a>
   </footer>
   <div class="corner-actions">
+    <button class="info-button" type="button" id="theme-toggle" aria-pressed="false" aria-label="Nach Feenzauber">☾</button>
     <button class="info-button" type="button" id="compose-open" aria-haspopup="dialog" aria-label="Eigenen Text verschicken">✎</button>
     <button class="info-button" type="button" id="details-open" aria-haspopup="dialog" aria-label="Details">?</button>
   </div>
@@ -361,6 +602,7 @@
       <label for="compose-text">Was soll ich?</label>
       <input id="compose-text" type="text" autocomplete="off" placeholder="Die Steuererklärung machen">
       <p class="compose-left" id="compose-left"></p>
+      <label class="compose-night"><input id="compose-night" type="checkbox"> Feenzauber!</label>
       <div class="compose-actions">
         <button type="button" id="compose-share">Link teilen</button>
         <button type="submit" id="compose-view">Ansehen</button>
@@ -369,6 +611,7 @@
     </form>
   </dialog>
   <script src="letters.js"></script>
+  <script src="night.js"></script>
   <script>
     (() => {
       const details = document.getElementById("details");
@@ -409,8 +652,24 @@
       window.addEventListener("hashchange", syncLegal);
       syncLegal();
 
+      const root = document.documentElement;
+      const unicorn = () => root.dataset.theme === "night"
+        ? "graphics/unicorn/unicorn-sleep.svg" : "graphics/unicorn/unicorn-float.svg";
+      const themeToggle = document.getElementById("theme-toggle");
+      const themeColor = document.querySelector('meta[name="theme-color"]');
+      const applyTheme = (theme) => {
+        root.dataset.theme = theme;
+        const night = theme === "night";
+        themeToggle.textContent = night ? "☀" : "☾";
+        themeToggle.setAttribute("aria-pressed", String(night));
+        themeToggle.setAttribute("aria-label", night ? "Zurück zum Tag" : "Nach Feenzauber");
+        themeColor.content = night ? "#141233" : "#e8e9f5";
+        document.querySelectorAll(".drift img").forEach((img) => { img.src = unicorn(); });
+      };
+      applyTheme(root.dataset.theme);
+      themeToggle.addEventListener("click", () => applyTheme(root.dataset.theme === "night" ? "day" : "night"));
+
       const stage = document.getElementById("stage");
-      const UNICORN = "graphics/unicorn/unicorn-float.svg";
       const RATIO = 410 / 545;
       // relative widths of the three size classes
       const LARGE = 1;
@@ -483,7 +742,7 @@
         const height = window.innerHeight;
         drawWaves(width, height, seeded(layoutSeed + 1));
         const random = seeded(layoutSeed);
-        const blocked = [".lettering", ".backlink", ".corner-actions"].map(
+        const blocked = [".lettering", ".backlink", ".corner-actions", ".celestial"].map(
           (selector) => box(document.querySelector(selector).getBoundingClientRect(), 12));
         const base = Math.sqrt(width * height) * 0.3;
         const placed = [];
@@ -540,10 +799,16 @@
           bob.className = "bob";
           bob.style.cssText = `--bob:${(5 + random() * 3.5).toFixed(1)}s;--delay:${delay}`;
           const img = document.createElement("img");
-          img.src = UNICORN;
+          img.src = unicorn();
           img.alt = "";
-          if (random() < 0.5) img.className = "mirrored";
-          bob.append(img);
+          const zzz = document.createElement("div");
+          zzz.className = "zzz";
+          zzz.innerHTML = "<span>z</span><span>z</span><span>Z</span>";
+          if (random() < 0.5) {
+            img.className = "mirrored";
+            zzz.classList.add("mirrored");
+          }
+          bob.append(img, zzz);
           drift.append(bob);
           stage.append(drift);
         }

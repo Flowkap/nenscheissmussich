@@ -434,8 +434,12 @@
   const left = document.getElementById("compose-left");
   const share = document.getElementById("compose-share");
   const view = document.getElementById("compose-view");
+  const night = document.getElementById("compose-night");
   input.maxLength = MAX_LENGTH;
-  const link = () => `${location.origin}${location.pathname}#${encodeURIComponent(tidy(input.value))}`;
+  // ?tag or ?nacht, read before the first paint in index.html
+  const search = () => (night.checked ? "?nacht" : "?tag");
+  const hash = () => `#${encodeURIComponent(tidy(input.value))}`;
+  const link = () => `${location.origin}${location.pathname}${search()}${hash()}`;
   const update = () => {
     const empty = !tidy(input.value);
     share.disabled = empty;
@@ -445,6 +449,7 @@
   };
   input.addEventListener("input", update);
   document.getElementById("compose-open").addEventListener("click", () => {
+    night.checked = document.documentElement.dataset.theme === "night";
     update();
     dialog.showModal();
   });
@@ -468,7 +473,9 @@
     event.preventDefault();
     if (view.disabled) return;
     dialog.close();
-    const hash = `#${encodeURIComponent(tidy(input.value))}`;
-    if (location.hash === hash) fromHash(); else location.hash = hash;
+    // a different time of day needs a fresh load, the hash alone does not reload the page
+    if (location.search !== search()) location.href = link();
+    else if (location.hash === hash()) fromHash();
+    else location.hash = hash();
   });
 })();
