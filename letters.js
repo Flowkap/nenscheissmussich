@@ -145,7 +145,7 @@
     Math.min(width / (Math.max(...lines.map(lineWidth)) + STROKE), height / blockHeight(lines.length));
 
   // the line breaks that let the text grow largest inside width × height
-  function fit(list, width, height) {
+  function fit(list, width, height, split = true) {
     const longest = Math.max(...list.map(wordWidth));
     const total = lineWidth(list);
     let best = null;
@@ -163,7 +163,7 @@
       if (scale > bestScale) { bestScale = scale; best = lines; }
     }
     // breaking a word only pays off for very long words
-    for (let count = 2; count <= 40; count++) {
+    for (let count = 2; split && count <= 40; count++) {
       const lines = wrap(list, total / count, true);
       const scale = scaleFor(lines, width, height);
       if (scale > bestScale * 1.5) { bestScale = scale; best = lines; }
@@ -259,6 +259,31 @@
     }
     return g;
   }
+
+  // a short text in the lettering style as a standalone svg that scales into any box about
+  // `aspect` (width / height) in shape; the unicorns' speech bubbles use it
+  function standalone(text, aspect) {
+    const list = words(text);
+    if (!list.length) return null;
+    const { lines } = fit(list, 1000 * aspect, 1000, false);
+    const top = -((lines.length - 1) * LINE_PITCH + 120) / 2;
+    const width = Math.max(...lines.map(lineWidth)) + STROKE;
+    const out = document.createElementNS(SVG_NS, "svg");
+    out.setAttribute("viewBox", `${-width / 2} ${top - ACCENT - STROKE / 2} ${width} ${blockHeight(lines.length)}`);
+    out.setAttribute("fill", "none");
+    out.setAttribute("stroke-linecap", "round");
+    out.setAttribute("stroke-linejoin", "round");
+    out.setAttribute("role", "img");
+    out.setAttribute("aria-label", tidy(text));
+    const { colours } = PALETTES[mood()];
+    place(lines, 1, 0, 0).forEach((g, i) => {
+      const el = glyph(g.char, colours[i % 3]);
+      el.setAttribute("transform", `translate(${g.x} ${g.y}) ${el.getAttribute("transform")}`);
+      out.append(el);
+    });
+    return out;
+  }
+  window.lettering = { standalone };
 
   const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
   const smooth = (a, b, t) => {

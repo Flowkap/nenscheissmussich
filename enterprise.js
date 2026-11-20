@@ -8,29 +8,15 @@
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
   const LABELS = ["1:1", "Sync", "Jour<br>fixe", "Daily", "Call"];
   const MAX = 40;
-  // all of them corporate ways of saying no
+  // short corporate ways of saying no; the bubble is small, so a few words at most
   const PHRASES = [
-    "Das ist leider nicht in Scope.",
-    "Dafür habe ich gerade keine Bandbreite.",
-    "Lass uns das ins nächste Quartal schieben.",
-    "Das ist aktuell nicht priorisiert.",
-    "Mach da mal ein Ticket auf.",
-    "Das müssen wir erst mit Legal abstimmen.",
-    "Dafür gibt es kein Budget.",
-    "Gibt es dafür einen Business Case?",
-    "Das ist eher ein Nice-to-have.",
-    "Lass uns das offline nehmen.",
-    "Das parken wir erstmal.",
-    "Schreib mir dazu mal eine Mail.",
-    "Da fehlt mir das Mandat.",
-    "Das muss erst durchs Steering Committee.",
-    "Sind alle Stakeholder abgeholt?",
-    "Steht auf der Roadmap. Für 2029.",
-    "Ich bin bis Ende Q3 ausgebucht.",
-    "Das zahlt nicht auf unsere OKRs ein.",
-    "Klingt spannend, aber nicht jetzt.",
-    "Da bräuchte ich erstmal ein Konzept.",
+    "Nein.", "Nö.", "Später.", "Ticket?", "Q4.", "Mail?", "Parken!",
+    "Kein Budget.", "Parken wir.", "Keine Kapa.", "Mail mir.", "Erst Legal.", "Nicht jetzt.",
+    "Nicht in Scope.", "Nicht priorisiert.", "Nächstes Quartal.", "Business Case?", "Nice-to-have.",
+    "Roadmap 2029.", "Q4. Vielleicht.",
   ];
+  // shape of the room for text inside the oval of the bubble
+  const TEXT_ASPECT = 262 / 172;
   const DOCS = [["W", "#3b6fc4"], ["X", "#2e8b57"], ["P", "#e0662f"]];
   // landed crumbs a unicorn takes before it pukes; older hits wear off after a few seconds
   const PUKE_AT = 5;
@@ -96,14 +82,25 @@
   let chatter = 0;
   function say() {
     chatter = setTimeout(say, 5000 + Math.random() * 7000);
-    const unicorns = [...document.querySelectorAll(".stage .away")].filter((u) => !u.querySelector(".bubble"));
+    // at the size of the design the bubble of a tiny unicorn would be too small to read
+    const unicorns = [...document.querySelectorAll(".stage .away")]
+      .filter((u) => !u.querySelector(".bubble") && u.getBoundingClientRect().width >= 160);
     if (!unicorns.length) return;
     const unicorn = unicorns[Math.floor(Math.random() * unicorns.length)];
     const bubble = document.createElement("div");
     // the head sits a little left of the middle, right of it when the picture is mirrored
     bubble.className = unicorn.querySelector("img.mirrored") ? "bubble mirrored" : "bubble";
-    bubble.textContent = PHRASES[Math.floor(Math.random() * PHRASES.length)];
-    bubble.addEventListener("animationend", () => bubble.remove());
+    const text = document.createElement("div");
+    text.className = "bubble-text";
+    // the bubble grows with the unicorn, so small ones only get the shortest phrases
+    const width = unicorn.getBoundingClientRect().width;
+    const limit = width < 200 ? 7 : width < 300 ? 12 : Infinity;
+    const fitting = PHRASES.filter((p) => p.length <= limit);
+    const lettering = window.lettering.standalone(fitting[Math.floor(Math.random() * fitting.length)], TEXT_ASPECT);
+    if (lettering) text.append(lettering);
+    bubble.append(text);
+    // a timer, not animationend: with reduced motion the bubble has no animation
+    setTimeout(() => bubble.remove(), 4000);
     unicorn.append(bubble);
   }
 
