@@ -1,6 +1,6 @@
 // Custom text from the URL hash, drawn in the lettering style. After a short pause the letters
 // swirl around the middle of the screen, turn into the letters of "'Nen Scheiss muss ich!"
-// on the way and settle into it.
+// on the way and settle into it. In enterprise mode the lettering itself says it more politely.
 (() => {
   // [width, path] on a cap height of 120 units, drawn as a dark round stroke with a coloured one
   // on top; same construction as graphics/lettering/lettering.svg
@@ -70,16 +70,21 @@
     "„": "\"", "“": "\"", "”": "\"", "«": "\"", "»": "\"", "‚": "'", "‘": "'", "’": "'", "`": "'",
     "´": "'", "–": "-", "—": "-", "…": "...", "ß": "ẞ",
   };
-  const COLORS = ["#2fb35a", "#f39a2b", "#f2d43a"];
-  const OUTLINE = "#2b1d26";
+  const PALETTES = {
+    fun: { colours: ["#2fb35a", "#f39a2b", "#f2d43a"], outline: "#2b1d26" },
+    enterprise: { colours: ["#7b98c9", "#98b0d8", "#6585bb"], outline: "#2a4b82" },
+  };
   const GAP = 52; // between two letters of a word
   const WORD_GAP = 122; // between two words
   const LINE_PITCH = 190;
   const STROKE = 36;
   // umlaut dots reach this far above the cap height
   const ACCENT = 60;
-  const TARGET = "'Nen Scheiss muss ich!";
-  const TARGET_LINES = { landscape: ["'NEN SCHEISS MUSS ICH!"], portrait: ["'NEN SCHEISS", "MUSS ICH!"] };
+  // about as long as the original, so it takes the same room and the unicorns keep clear of it
+  const TARGETS = {
+    fun: { text: "'Nen Scheiss muss ich!", landscape: ["'NEN SCHEISS MUSS ICH!"], portrait: ["'NEN SCHEISS", "MUSS ICH!"] },
+    enterprise: { text: "Wie besprochen: nein.", landscape: ["WIE BESPROCHEN: NEIN."], portrait: ["WIE BESPROCHEN:", "NEIN."] },
+  };
   // a short sentence, not an essay
   const MAX_LENGTH = 80;
   const HOLD = 5000;
@@ -188,16 +193,16 @@
 
   // the final lettering at the size and position of the static one, and the custom text in a
   // larger box around it, never drawn larger than the final lettering
-  function layouts(text, width, height) {
+  function layouts(text, width, height, mood = "fun") {
     const portrait = height > width;
     const cx = width / 2;
     const cy = height * (portrait ? 0.46 : 0.47);
-    const targetLines = TARGET_LINES[portrait ? "portrait" : "landscape"]
+    const targetLines = TARGETS[mood][portrait ? "portrait" : "landscape"]
       .map((line) => line.split(" ").map((w) => [...w]));
     const targetScale = Math.min(portrait ? width * 0.88 : Math.min(width * 0.92, 1400), width) /
       (Math.max(...targetLines.map(lineWidth)) + STROKE);
     const list = words(text);
-    const source = fit(list, width * (portrait ? 0.88 : 0.92), height * 0.7);
+    const source = list.length ? fit(list, width * (portrait ? 0.88 : 0.92), height * 0.7) : { lines: [], scale: 0 };
     return {
       source: place(source.lines, Math.min(source.scale, targetScale), cx, cy),
       target: place(targetLines, targetScale, cx, cy),
@@ -239,12 +244,13 @@
   const SVG_NS = "http://www.w3.org/2000/svg";
   const svg = document.getElementById("letters");
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const mood = () => (document.documentElement.dataset.theme === "enterprise" ? "enterprise" : "fun");
 
   function glyph(char, colour) {
     const [w, d] = GLYPHS[char];
     const g = document.createElementNS(SVG_NS, "g");
     g.setAttribute("transform", `translate(${-w / 2} -60)`);
-    for (const [stroke, width] of [[OUTLINE, STROKE], [colour, 22]]) {
+    for (const [stroke, width] of [[PALETTES[mood()].outline, STROKE], [colour, 22]]) {
       const path = document.createElementNS(SVG_NS, "path");
       path.setAttribute("d", d);
       path.setAttribute("stroke", stroke);
@@ -278,7 +284,7 @@
       if (run !== id) return;
       state.phase = "swirl";
       state.start = performance.now();
-      svg.setAttribute("aria-label", TARGET);
+      svg.setAttribute("aria-label", TARGETS[mood()].text);
       render();
     }, HOLD);
   }
@@ -288,35 +294,54 @@
     if (state) clearTimeout(state.timer);
     state = null;
     document.documentElement.classList.remove("custom", "settled");
-    svg.setAttribute("aria-hidden", "true");
-    svg.replaceChildren();
+    idle();
+  }
+
+  // without a custom text only the enterprise lettering is drawn here, the other one is an image
+  function idle() {
+    if (mood() !== "enterprise") {
+      svg.setAttribute("aria-hidden", "true");
+      svg.removeAttribute("aria-label");
+      svg.replaceChildren();
+      return;
+    }
+    svg.removeAttribute("aria-hidden");
+    svg.setAttribute("aria-label", TARGETS.enterprise.text);
+    draw([layouts("", window.innerWidth, window.innerHeight, "enterprise").target]);
+  }
+
+  // still letters in the swaying group
+  function draw(...lists) {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    const sway = document.createElementNS(SVG_NS, "g");
+    sway.setAttribute("class", "sway");
+    svg.replaceChildren(sway);
+    const { colours } = PALETTES[mood()];
+    return lists.map(([list, opacity = 1]) => {
+      const group = document.createElementNS(SVG_NS, "g");
+      group.style.opacity = opacity;
+      list.forEach((g, i) => {
+        const el = glyph(g.char, colours[i % 3]);
+        el.setAttribute("transform", `translate(${g.x} ${g.y}) scale(${g.scale}) ${el.getAttribute("transform")}`);
+        group.append(el);
+      });
+      sway.append(group);
+      return group;
+    });
   }
 
   // builds the letters for the current phase and viewport, and drives the swirl
   function render() {
     const width = window.innerWidth;
     const height = window.innerHeight;
-    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-    const { source, target, centre } = layouts(state.text, width, height);
-    const sway = document.createElementNS(SVG_NS, "g");
-    sway.setAttribute("class", "sway");
-    svg.replaceChildren(sway);
+    const { source, target, centre } = layouts(state.text, width, height, mood());
 
-    const still = (list, opacity = 1) => {
-      const group = document.createElementNS(SVG_NS, "g");
-      group.style.opacity = opacity;
-      list.forEach((g, i) => {
-        const el = glyph(g.char, COLORS[i % 3]);
-        el.setAttribute("transform", `translate(${g.x} ${g.y}) scale(${g.scale}) ${el.getAttribute("transform")}`);
-        group.append(el);
-      });
-      sway.append(group);
-      return group;
-    };
-
-    if (state.phase === "hold") { still(source); return; }
+    if (state.phase === "hold") { draw([source]); return; }
     if (state.phase === "done") {
-      still(target);
+      svg.setAttribute("aria-label", TARGETS[mood()].text);
+      draw([target]);
       // the unicorns only float in once the lettering has settled
       document.documentElement.classList.add("settled");
       return;
@@ -324,8 +349,7 @@
 
     const id = state.id;
     if (reduced.matches) {
-      const from = still(source);
-      const to = still(target, 0);
+      const [from, to] = draw([source], [target, 0]);
       const step = (now) => {
         if (run !== id) return;
         const t = Math.min(1, (now - state.start) / 1200);
@@ -348,8 +372,11 @@
     };
     const somewhere = () => ({ x: centre.x + Math.cos(random() * TAU) * rx * (0.5 + random() * 0.4),
       y: centre.y + Math.sin(random() * TAU) * ry * (0.5 + random() * 0.4), scale: 0 });
-    const colourOf = new Map(target.map((g, i) => [g, COLORS[i % 3]]));
-    const sourceColour = new Map(source.map((g, i) => [g, COLORS[i % 3]]));
+    draw();
+    const sway = svg.querySelector(".sway");
+    const { colours } = PALETTES[mood()];
+    const colourOf = new Map(target.map((g, i) => [g, colours[i % 3]]));
+    const sourceColour = new Map(source.map((g, i) => [g, colours[i % 3]]));
 
     const letters = pair(source, target, random).map(({ from, to }) => {
       const el = document.createElementNS(SVG_NS, "g");
@@ -419,13 +446,19 @@
   window.addEventListener("resize", () => {
     clearTimeout(pending);
     pending = setTimeout(() => {
-      if (!state) return;
+      if (!state) { idle(); return; }
       // a swirl laid out for the old size would end in the wrong place
       if (state.phase === "swirl") { run++; state.id = run; state.phase = "done"; }
       render();
     }, 150);
   });
   window.addEventListener("hashchange", fromHash);
+  // switching to or from enterprise mode changes what the lettering says and how it looks
+  new MutationObserver(() => {
+    if (!state) { idle(); return; }
+    if (state.phase === "swirl") { run++; state.id = run; state.phase = "done"; }
+    render();
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   fromHash();
 
   // the dialog that builds the link
@@ -434,10 +467,11 @@
   const left = document.getElementById("compose-left");
   const share = document.getElementById("compose-share");
   const view = document.getElementById("compose-view");
-  const night = document.getElementById("compose-night");
+  const modes = document.getElementById("compose-mode");
   input.maxLength = MAX_LENGTH;
-  // ?tag or ?nacht, read before the first paint in index.html
-  const search = () => (night.checked ? "?nacht" : "?tag");
+  // ?tag, ?nacht or ?enterprise, read before the first paint in index.html
+  const PARAM = { day: "tag", night: "nacht", enterprise: "enterprise" };
+  const search = () => `?${modes.querySelector("input:checked").value}`;
   const hash = () => `#${encodeURIComponent(tidy(input.value))}`;
   const link = () => `${location.origin}${location.pathname}${search()}${hash()}`;
   const update = () => {
@@ -449,7 +483,7 @@
   };
   input.addEventListener("input", update);
   document.getElementById("compose-open").addEventListener("click", () => {
-    night.checked = document.documentElement.dataset.theme === "night";
+    modes.querySelector(`input[value="${PARAM[document.documentElement.dataset.theme]}"]`).checked = true;
     update();
     dialog.showModal();
   });
@@ -473,9 +507,12 @@
     event.preventDefault();
     if (view.disabled) return;
     dialog.close();
-    // a different time of day needs a fresh load, the hash alone does not reload the page
+    // a different mood needs a fresh load, the hash alone does not reload the page
     if (location.search !== search()) location.href = link();
-    else if (location.hash === hash()) fromHash();
+    else if (search() !== `?${PARAM[document.documentElement.dataset.theme]}`) {
+      location.hash = hash();
+      location.reload();
+    } else if (location.hash === hash()) fromHash();
     else location.hash = hash();
   });
 })();

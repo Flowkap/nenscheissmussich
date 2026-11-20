@@ -24,6 +24,11 @@ together with [Claude Code](https://claude.com/claude-code).
   of "'Nen Scheiss muss ich!" on the way and settle into it. Surplus letters vanish in the swirl,
   missing ones appear from it. Up to 80 characters: letters A–Z, Ä, Ö, Ü, ẞ, digits and common
   punctuation; anything else is dropped. With reduced motion the text simply fades over.
+- Three moods: day, night ("Feenzauber", fairies and sleeping unicorns) and enterprise (an office
+  carpet, burnt-out unicorns in suits on swivel chairs puking grey
+  rainbows full of meeting invites, and the lettering reads "Wie besprochen: nein."). Sunrise and sunset pick day or night; the
+  buttons top right switch, and a link may ask for one with `?tag`, `?nacht` or `?enterprise`.
+  The ✎ dialog puts the chosen mood into the link. Nothing is remembered.
 - Installable as a web app (PWA): `manifest.webmanifest` plus a network-first service worker
   (`sw.js`) that only serves from cache when offline.
 

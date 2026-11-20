@@ -12,7 +12,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <!-- before the first paint, so neither the unicorns nor the static lettering flash up -->
   <script>if (location.hash.length > 1 && !["#impressum", "#datenschutz"].includes(location.hash)) document.documentElement.classList.add("custom");</script>
-  <!-- a shared link may ask for ?tag or ?nacht; otherwise sunrise and sunset decide. Never remembered. -->
+  <!-- a shared link may ask for ?tag, ?nacht or ?enterprise; otherwise sunrise and sunset decide. Never remembered. -->
   <script>(() => {
     // sunrise equation for a fixed spot in the middle of Germany; no location is asked for
     const LAT = 51.16;
@@ -32,7 +32,7 @@
     const dark = now < toMs(transit - halfDay) || now > toMs(transit + halfDay);
     const params = new URLSearchParams(location.search);
     const night = params.has("nacht") || (!params.has("tag") && dark);
-    document.documentElement.dataset.theme = night ? "night" : "day";
+    document.documentElement.dataset.theme = params.has("enterprise") ? "enterprise" : night ? "night" : "day";
   })();</script>
   <meta name="theme-color" content="#e8e9f5">
   <meta name="apple-mobile-web-app-title" content="Nen Scheiss">
@@ -63,6 +63,24 @@
       --heading: #ff9ad8;
       --muted: rgba(244, 236, 255, 0.82);
       --hover-tint: rgba(244, 236, 255, 0.1);
+    }
+    /* enterprise: slide-deck grey with a spreadsheet grid, navy ink, nothing rounder than it must be */
+    :root[data-theme="enterprise"] {
+      --paper: #eef1f6;
+      --sky:
+        linear-gradient(rgba(31, 58, 104, 0.07) 1px, transparent 1px) 0 0 / 36px 36px,
+        linear-gradient(90deg, rgba(31, 58, 104, 0.07) 1px, transparent 1px) 0 0 / 36px 36px,
+        var(--paper);
+      --wave: #8a9bb8;
+      --ink: #1b2a4a;
+      --glass: rgba(255, 255, 255, 0.92);
+      --sheet: #fff;
+      --sheet-strong: #fff;
+      --field: #fff;
+      --heading: #1f4e8c;
+      --muted: rgba(27, 42, 74, 0.82);
+      --hover-tint: rgba(27, 42, 74, 0.07);
+      --corporate: Arial, "Helvetica Neue", Helvetica, sans-serif;
     }
     * { box-sizing: border-box; }
     html, body { height: 100%; margin: 0; }
@@ -147,7 +165,7 @@
       50%      { transform: translateY(-2vh) rotate(0.6deg); }
     }
     /* the static lettering keeps its place so the unicorns still keep clear of it */
-    .custom .lettering { visibility: hidden; }
+    .custom .lettering, [data-theme="enterprise"] .lettering { visibility: hidden; }
     /* with a custom text the unicorns are gone at once and surface one after another once the
        lettering has settled; the transition only belongs to the way in */
     .custom .drift {
@@ -233,7 +251,7 @@
     }
     .details-footer form { margin: 0; }
     .details-body label { display: block; margin: 0 0 4px; font-weight: 700; }
-    .details-body input {
+    .details-body input[type="text"] {
       width: 100%;
       padding: 8px 12px;
       border: 2px solid currentColor;
@@ -305,8 +323,10 @@
     .imprint-body p { color: var(--muted); }
     .imprint-body h3 + h4 { margin-top: 6px; }
     .imprint-body h4 { margin: 12px 0 2px; font-size: 0.9rem; }
-    .details-body .compose-night { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-weight: 400; cursor: pointer; }
-    .details-body .compose-night input { width: 1.1em; height: 1.1em; margin: 0; accent-color: #b14e8c; }
+    .compose-mode { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 12px; padding: 0; border: 0; }
+    .compose-mode legend { padding: 0; margin: 0 0 4px; font-weight: 700; }
+    .details-body .compose-mode label { display: flex; align-items: center; gap: 6px; margin: 0; font-weight: 400; cursor: pointer; }
+    .details-body .compose-mode input { width: 1.1em; height: 1.1em; margin: 0; accent-color: #b14e8c; }
     .compose-left { margin: 4px 0 12px; font-size: 0.85rem; text-align: right; }
     .compose-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
     .details-body button:disabled { opacity: 0.4; cursor: default; }
@@ -319,6 +339,93 @@
       font: inherit;
       cursor: pointer;
     }
+    /* a round info-button with just the briefcase; it only spells itself out in enterprise mode */
+    .enterprise-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .enterprise-button svg { width: 20px; height: 20px; flex: none; }
+    .enterprise-button .label, .enterprise-button .tier { display: none; }
+    .enterprise-button .tier {
+      padding: 3px 5px;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+    }
+    [data-theme="enterprise"] .enterprise-button { width: auto; padding: 0 12px; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; }
+    [data-theme="enterprise"] .enterprise-button .label,
+    [data-theme="enterprise"] .enterprise-button .tier { display: inline; }
+    @media (max-width: 480px) {
+      [data-theme="enterprise"] .enterprise-button .label { display: none; }
+    }
+    [data-theme="enterprise"] .info-button {
+      border: 1px solid #0d1d3a;
+      border-radius: 3px;
+      background: linear-gradient(#2a4b82, #15305c);
+      color: #fff;
+      font-family: var(--corporate);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 6px rgba(13, 29, 58, 0.35);
+      transition: filter 0.2s, transform 0.2s;
+    }
+    [data-theme="enterprise"] .info-button:hover, [data-theme="enterprise"] .info-button:focus-visible {
+      border-color: #0d1d3a;
+      background: linear-gradient(#2a4b82, #15305c);
+      color: #fff;
+      filter: brightness(1.2);
+      transform: translateY(-1px);
+    }
+    [data-theme="enterprise"] .enterprise-button .tier { border-radius: 2px; background: #3fbf6f; color: #fff; }
+    [data-theme="enterprise"] .backlink { border-radius: 2px; font-family: var(--corporate); box-shadow: 0 1px 4px rgba(13, 29, 58, 0.15); }
+    [data-theme="enterprise"] .details { border-radius: 4px; font-family: var(--corporate); }
+    [data-theme="enterprise"] .details-body button,
+    [data-theme="enterprise"] .details-body input[type="text"] { border-width: 1px; border-radius: 3px; }
+    [data-theme="enterprise"] .details-body .compose-mode input { accent-color: #1f4e8c; }
+    [data-theme="enterprise"] .imprint-head::after { background: linear-gradient(90deg, #15305c, #2a4b82 50%, #8a9bb8); }
+    [data-theme="enterprise"] .imprint .imprint-close:hover { background: #1f4e8c; }
+    /* no sea in the office */
+    [data-theme="enterprise"] .wave { display: none; }
+    /* chairs roll a little further and swivel instead of bobbing on the waves */
+    [data-theme="enterprise"] .drift { animation-name: roll; }
+    @keyframes roll {
+      from { transform: translateX(calc(var(--amp) * -1.6)); }
+      to   { transform: translateX(calc(var(--amp) * 1.6)); }
+    }
+    [data-theme="enterprise"] .bob { animation-name: swivel; }
+    @keyframes swivel {
+      0%, 100% { transform: rotate(-1.5deg); }
+      50%      { transform: rotate(1.5deg); }
+    }
+    [data-theme="enterprise"] .lettering,
+    [data-theme="enterprise"] .letters { filter: drop-shadow(0 6px 10px rgba(13, 29, 58, 0.18)); }
+    .kpi { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .kpi .bar {
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      animation: kpi 3.2s ease-in-out var(--delay) infinite alternate;
+    }
+    @keyframes kpi { from { transform: scaleY(0.55); } }
+    .kpi .trend { stroke-dasharray: 130; animation: trend 3.2s ease-in-out infinite alternate; }
+    @keyframes trend { from { stroke-dashoffset: 130; } to { stroke-dashoffset: 0; } }
+    .confidential {
+      position: fixed;
+      left: 16px;
+      bottom: 56px;
+      padding: 6px 12px;
+      border: 3px double #c0392b;
+      border-radius: 3px;
+      color: #c0392b;
+      font: 700 0.75rem/1.25 var(--corporate);
+      letter-spacing: 0.18em;
+      text-align: center;
+      text-transform: uppercase;
+      rotate: -8deg;
+      opacity: 0.85;
+      pointer-events: none;
+    }
+    .confidential small { display: block; font-size: 0.6rem; letter-spacing: 0.1em; }
+    /* hidden, not gone: its spot stays free of unicorns, so switching modes needs no new layout */
+    :root:not([data-theme="enterprise"]) .confidential { visibility: hidden; }
     /* night: sky, fairies, dust and a little shimmer on unicorns and lettering (see night.js) */
     .night-sky, .fairy-dust, .zzz { display: none; }
     [data-theme="night"] .night-sky,
@@ -333,7 +440,8 @@
       pointer-events: none;
     }
     .moon, .sun { position: absolute; inset: 0; }
-    [data-theme="night"] .sun, :root:not([data-theme="night"]) .moon { visibility: hidden; }
+    [data-theme="night"] .sun, [data-theme="enterprise"] .sun,
+    :root:not([data-theme="night"]) .moon, :root:not([data-theme="enterprise"]) .kpi { visibility: hidden; }
     .sun { width: 100%; height: 100%; overflow: visible; }
     .sun .rays, .sun .face {
       transform-box: view-box;
@@ -519,6 +627,15 @@
       </g>
     </svg>
     <div class="moon"></div>
+    <svg class="kpi" viewBox="0 0 120 120">
+      <rect x="4" y="4" width="112" height="112" rx="4" fill="#fff" stroke="#1b2a4a" stroke-width="3"/>
+      <path d="M20 100 H104 M20 100 V20" fill="none" stroke="#1b2a4a" stroke-width="3" stroke-linecap="round"/>
+      <rect class="bar" x="28" y="72" width="14" height="28" fill="#8a9bb8" style="--delay:0s"/>
+      <rect class="bar" x="48" y="58" width="14" height="42" fill="#5b7bb0" style="--delay:-0.6s"/>
+      <rect class="bar" x="68" y="44" width="14" height="56" fill="#2a4b82" style="--delay:-1.2s"/>
+      <rect class="bar" x="88" y="28" width="14" height="72" fill="#15305c" style="--delay:-1.8s"/>
+      <path class="trend" d="M26 66 L50 54 L70 40 L98 18 M86 16 L100 16 L100 30" fill="none" stroke="#3fbf6f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
   </div>
   <div class="night-sky" id="night-sky" aria-hidden="true"></div>
   <div class="stage" id="stage" aria-hidden="true"></div>
@@ -530,6 +647,7 @@
   </div>
   <svg class="letters" id="letters" role="img" aria-hidden="true"></svg>
   <div class="fairy-dust" id="fairy-dust" aria-hidden="true"></div>
+  <div class="confidential" aria-hidden="true">Confidential<small>Internal use only</small></div>
   <footer class="backlink">
     <a href="https://flowkap.dev">flowkap.dev</a>
     ·
@@ -538,6 +656,12 @@
     <a href="#datenschutz" aria-haspopup="dialog">Datenschutz</a>
   </footer>
   <div class="corner-actions">
+    <button class="info-button enterprise-button" type="button" id="enterprise-toggle" aria-pressed="false" aria-label="Enterprise Mode" title="Enterprise Mode">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="7" width="18" height="13" rx="1.5"/><path d="M9 7V5h6v2M3 12h18M11 12v2h2v-2"/>
+      </svg>
+      <span class="label">Enterprise</span> <span class="tier">Pro</span>
+    </button>
     <button class="info-button" type="button" id="theme-toggle" aria-pressed="false" aria-label="Nach Feenzauber">☾</button>
     <button class="info-button" type="button" id="compose-open" aria-haspopup="dialog" aria-label="Eigenen Text verschicken">✎</button>
     <button class="info-button" type="button" id="details-open" aria-haspopup="dialog" aria-label="Details">?</button>
@@ -602,7 +726,12 @@
       <label for="compose-text">Was soll ich?</label>
       <input id="compose-text" type="text" autocomplete="off" placeholder="Die Steuererklärung machen">
       <p class="compose-left" id="compose-left"></p>
-      <label class="compose-night"><input id="compose-night" type="checkbox"> Feenzauber!</label>
+      <fieldset class="compose-mode" id="compose-mode">
+        <legend>Stimmung</legend>
+        <label><input type="radio" name="compose-mode" value="tag"> Tag</label>
+        <label><input type="radio" name="compose-mode" value="nacht"> Feenzauber!</label>
+        <label><input type="radio" name="compose-mode" value="enterprise"> Enterprise Mode</label>
+      </fieldset>
       <div class="compose-actions">
         <button type="button" id="compose-share">Link teilen</button>
         <button type="submit" id="compose-view">Ansehen</button>
@@ -653,9 +782,14 @@
       syncLegal();
 
       const root = document.documentElement;
-      const unicorn = () => root.dataset.theme === "night"
-        ? "graphics/unicorn/unicorn-sleep.svg" : "graphics/unicorn/unicorn-float.svg";
+      const UNICORNS = {
+        day: "graphics/unicorn/unicorn-float.svg",
+        night: "graphics/unicorn/unicorn-sleep.svg",
+        enterprise: "graphics/unicorn/unicorn-enterprise.svg",
+      };
+      const unicorn = () => UNICORNS[root.dataset.theme];
       const themeToggle = document.getElementById("theme-toggle");
+      const enterpriseToggle = document.getElementById("enterprise-toggle");
       const themeColor = document.querySelector('meta[name="theme-color"]');
       const applyTheme = (theme) => {
         root.dataset.theme = theme;
@@ -663,11 +797,14 @@
         themeToggle.textContent = night ? "☀" : "☾";
         themeToggle.setAttribute("aria-pressed", String(night));
         themeToggle.setAttribute("aria-label", night ? "Zurück zum Tag" : "Nach Feenzauber");
-        themeColor.content = night ? "#141233" : "#e8e9f5";
+        const enterprise = theme === "enterprise";
+        enterpriseToggle.setAttribute("aria-pressed", String(enterprise));
+        themeColor.content = night ? "#141233" : enterprise ? "#eef1f6" : "#e8e9f5";
         document.querySelectorAll(".drift img").forEach((img) => { img.src = unicorn(); });
       };
       applyTheme(root.dataset.theme);
       themeToggle.addEventListener("click", () => applyTheme(root.dataset.theme === "night" ? "day" : "night"));
+      enterpriseToggle.addEventListener("click", () => applyTheme(root.dataset.theme === "enterprise" ? "day" : "enterprise"));
 
       const stage = document.getElementById("stage");
       const RATIO = 410 / 545;
@@ -742,7 +879,7 @@
         const height = window.innerHeight;
         drawWaves(width, height, seeded(layoutSeed + 1));
         const random = seeded(layoutSeed);
-        const blocked = [".lettering", ".backlink", ".corner-actions", ".celestial"].map(
+        const blocked = [".lettering", ".backlink", ".corner-actions", ".celestial", ".confidential"].map(
           (selector) => box(document.querySelector(selector).getBoundingClientRect(), 12));
         const base = Math.sqrt(width * height) * 0.3;
         const placed = [];
