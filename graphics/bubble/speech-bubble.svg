@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="625 50 455 345" role="img" aria-labelledby="t">
+  <title id="t">Empty speech bubble with a tail at the lower left and three attention strokes at the upper right</title>
+  <g stroke="#2b1d26" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M706 313 A182 120 0 1 1 750 336 C 722 360 684 380 640 383 C 672 366 694 342 706 313 Z"
+          fill="#fcf7f0" stroke-width="10"/>
+    <g stroke-width="17">
+      <path d="M980 106 L 996 72 M1008 130 L 1038 102 M1026 156 L 1060 146"/>
+    </g>
+    <g stroke="#f4d21c" stroke-width="8">
+      <path d="M980 106 L 996 72 M1008 130 L 1038 102 M1026 156 L 1060 146"/>
+    </g>
+  </g>
+</svg>
